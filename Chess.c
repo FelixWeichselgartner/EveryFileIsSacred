@@ -1,6 +1,6 @@
 /*
 ***********************************************
-*  C - Chess program with save function
+*  C - Chess program
 ***********************************************
 *  Copyright (c) 2018 Felix Weichselgartner
 *  all rights reserved
@@ -24,7 +24,7 @@ const char neutral = '0', white = '1', black = '2';
 #define _ENCODE_ false //false: save file is not encoded
 #define _CHECK_ true //false: figure-movement are not checked
 const char encode_figure = 'S';
-const char encode_color = 'W'; //yes this stands for STAR WARS
+const char encode_color = 'W';
 
 /*
 * things to fix:
