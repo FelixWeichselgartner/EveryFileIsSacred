@@ -12,7 +12,6 @@
 char *gets(char *buffer); //scanf can be used this way
 #include <stdio.h>
 #include <math.h>
-#include <conio.h>
 #include <string.h>
 #define fieldsize 8
 #define background_color "color C0"
@@ -21,7 +20,7 @@ char *gets(char *buffer); //scanf can be used this way
 const char neutral = '0', white = '1', black = '2';
 #define true 1
 #define false 0
-#define _TURN_ true //false: turn is not checked
+#define _TURN_ false //false: turn is not checked
 #define _ENCODE_ false //false: save file is not encoded
 #define _CHECK_ true //false: figure-movement are not checked
 const char encode_figure = 'S';
@@ -135,10 +134,11 @@ void show_board(char board[fieldsize][fieldsize][2]) {
 */
 
 int bishop_movement(char figure, char color, char board[fieldsize][fieldsize][2], int s_from, int z_from, int s_to, int z_to) {
-	if (board[z_to][z_from][1] == color) {
+	//if (board[z_to][s_to][1] == color) { color is false
+	if (board[z_to][s_to][1] == board[z_from][s_from][1]) {
 		return false;
 	}
-	int deltaLs = absolute(s_from - s_to), deltaLz = absolute(z_from - z_to), flag; //the difference of old/new position
+	int deltaLs = absolute(s_from - s_to), deltaLz = absolute(z_from - z_to), flag = 0; //the difference of old/new position
 	if (z_from == z_to) {
 		return false;
 	}
@@ -150,7 +150,7 @@ int bishop_movement(char figure, char color, char board[fieldsize][fieldsize][2]
 	}
 	else {
 		if (z_from < z_to) {
-			for (int i = 0; i <= deltaLz; i++) {
+			for (int i = 0; i < deltaLz; i++) {
 				if (s_to > s_from) { //case 1: up and right
 					if (board[z_from + 1 + i][s_from + 1 + i][0] != ' ') {
 						if (z_from + 1 + i == z_to) {
@@ -176,11 +176,11 @@ int bishop_movement(char figure, char color, char board[fieldsize][fieldsize][2]
 			}
 		}
 		if (z_from > z_to) {
-			for (int i = 0; i >= (-deltaLz); i--) {
+			for (int i = 0; i > (-deltaLz); i--) {
 				if (s_to > s_from) { //case 3: down and right
 					if (board[z_from - 1 + i][s_from + 1 - i][0] != ' ') {
 						if (z_from - 1 + i == z_to) {
-							if (s_from - 1 + i == s_to) {
+							if (s_from + 1 + i == s_to) {
 								flag = 1;
 							}
 						}
@@ -212,7 +212,7 @@ int bishop_movement(char figure, char color, char board[fieldsize][fieldsize][2]
 */
 
 int rook_movement(char figure, char color, char board[fieldsize][fieldsize][2], int s_from, int z_from, int s_to, int z_to) {
-	if (board[z_to][z_from][1] == color) {
+	if (board[z_to][s_to][1] == color) {
 		return false;
 	}
 	if (!(z_from == z_to) && !(s_from == s_to)) {
@@ -222,15 +222,15 @@ int rook_movement(char figure, char color, char board[fieldsize][fieldsize][2], 
 		return false;
 	}
 	if (z_from == z_to) {
-		for (int i = s_from; i < s_to; i++) {
-			if (board[z_from][i+1][0] != ' ') {
+		for (int i = s_from; i < s_to - 1; i++) {
+			if (board[z_from][i + 1][0] != ' ') {
 				return false;
 			}
 		}
 	}
 	if (s_from == s_to) {
-		for (int i = z_from; i < z_to; i++) {
-			if (board[i+1][s_from][0] != ' ') {
+		for (int i = z_from; i < z_to - 1; i++) {
+			if (board[i + 1][s_from][0] != ' ') {
 				return false;
 			}
 		}
@@ -473,7 +473,7 @@ int catch_old(char board[fieldsize][fieldsize][2], int *turn) {
 	fp = fopen(name, "r");
 	if (fp == NULL) {
 		printf("file couldn't be opened\npress any button to close the game\n");
-		getch();
+		getchar();
 		return 0;
 		flag = 1;
 	}
@@ -544,18 +544,18 @@ void main() {
 		}
 		printf("your old board has been loaded\n");
 		printf("press any button to begin: ");
-		getch();
+		getchar();
 		system("cls");
 	}
 	else if (new_old == 'n') {
 		setup(board); //write in board the standard chess layout
 		printf("press any button to begin: ");
-		getch();
+		getchar();
 		system("cls");
 	}
 	else {
 		printf("please restart the game\n");
-		getch();
+		getchar();
 		return;
 	}
 	system(background_color); //set the background color to red
@@ -568,7 +568,7 @@ void main() {
 			save_game(board, amount);
 			printf("your game has been saved\n");
 			printf("press any button to close the game");
-			getch();
+			getchar();
 			return;
 		}
 		if (win == 45) {
@@ -595,12 +595,12 @@ void main() {
 		if (win == 1) { //checks if white won
 			printf("white wins!\n");
 			printf("press any button to close the game");
-			getch();
+			getchar();
 		}
 		if (win == -1) { //checks if black won
 			printf("black wins!\n");
 			printf("press any button to close the game");
-			getch();
+			getchar();
 		}
 		amount++; //turn is one higher now
 	}
