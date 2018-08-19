@@ -99,7 +99,7 @@ void setup(char board[fieldsize][fieldsize][2]) {
 	board[7][0][1] = board[7][1][1] = board[7][2][1] = board[7][3][1] = black;
 	board[7][4][1] = board[7][5][1] = board[7][6][1] = board[7][7][1] = black;
 	for (int i = 0; i < fieldsize; i++) {
-		board[6][i][0] = 'B';
+		board[6][i][0] = 'B'; //those 2 as one
 		board[6][i][1] = black;
 	}
 	for (int i = 0; i < fieldsize; i++) {
