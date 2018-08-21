@@ -1,0 +1,17 @@
+***************************************************
+*  Python script for exchanging names in csv-files
+***************************************************
+*  Copyright (c) 2018 Felix Weichselgartner
+***************************************************
+
+
+1.) Python installieren (python.org)
+2.) Console öffnen mit Windows+R, cmd.exe
+3.) Backups aller wichtigen Dateien erstellen
+4.) Übersetzungsliste als csv abspeichern (im selben Stil wie example.csv)
+5.) Datei in der ersetzt werden soll als csv abspeichern
+6.) Beide csv Dateien in den selben Ordner wie die Python-Datei (oder umgekehrt)
+7.) Skript ausführen mit "python exchange_in_csv.py"
+8.) Dateinamen der Übersetzungsliste und zu ändernden Datei angeben
+9.) CSV Datei-Inhalt in XLSX Datei zurückkopieren
+10.) Im schlimmsten Fall Backup wiederherstellen
