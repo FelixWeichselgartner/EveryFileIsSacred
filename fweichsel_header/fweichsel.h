@@ -28,5 +28,6 @@ int euklid_algorithm(int, int);
 float parallel(float, float);
 void quadratic_equation(float, float, float, float, float);
 int absolute(int);
+void delay(int);
 
 #endif
