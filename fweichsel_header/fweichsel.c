@@ -10,7 +10,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-//#include <conio.h> 
+#include <time.h>
+#include <conio.h> 
 
 const double pi = 3.141592653589;
 const double e = 2.718281828459;
@@ -212,11 +213,14 @@ void quadratic_formula(float a, float b, float c, float *x1, float *x2)	{
 	}
 }
 
-int absolute(int n) {
-	if (n >= 0) {
-		return n;
-	}
-	else {
-		return (-n);
-	}
+int absolute(int x) {
+	if (x >= 0)
+		return x;
+	else return -x;
 }
+
+void delay(int milli_seconds) {
+    clock_t start_time = clock(); 
+    while (clock() < start_time + milli_seconds) 
+        ; 
+} 
