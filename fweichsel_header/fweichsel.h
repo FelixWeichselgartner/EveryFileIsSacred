@@ -109,6 +109,7 @@ void quadratic_equation(float, float, float, float *, float *);
 absolute:	n is the value -> returns the absolute of n
 */
 int absolute(int);
+void delay(int);
 
 /*
 delay:  parameter is the amount of delay in milliseconds
