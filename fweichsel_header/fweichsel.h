@@ -63,6 +63,11 @@ char read_char(char, char);
 void read_string(char *);
 
 /*
+using scanf() to get a string with a space in it
+*/
+void read_string_scanf(char *);
+
+/*
 Fibonacci:  returns the n-element of the 1-1-(start-parameter)-fibonacci
 */
 int fibonacci(int);

@@ -106,6 +106,11 @@ void read_string(char *string) {
 	gets(string);
 }
 
+void read_string_scanf(char *string); {
+	printf("enter a string: ";)
+	scanf("%[^\n]s", string);
+}
+
 int fibonacci(int n) {
 	if (n <= 1)
 		return n;
