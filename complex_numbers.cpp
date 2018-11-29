@@ -5,21 +5,18 @@ using namespace std;
 
 class Complex {
     private:
-        string name;
         double vreal, vimag;
         double a, phi; //phi in degree
 
     public:
         //Constructor
-        Complex(string n = "empty", double first = 0, double second = 0, char form = ' ') {
+        Complex(double first = 0, double second = 0, char form = ' ') {
             if (form == 'p') {
                 a = first; phi = second;
-                name = n;
                 calculate2();
             }
             else if (form == 'c') {
                 vreal = first; vimag = second;
-                name = n;
                 calculate();
             }
             else {
@@ -70,8 +67,8 @@ class Complex {
             return phi;
         }
         void printNumber() {
-            cout << name << ": " << vreal << " + j" << vimag << endl;
-            cout << a << "*exp(j * " << phi << ")" << endl;
+            cout << vreal << " + j" << vimag << endl;
+            cout << a << "* exp(j * " << phi << ")" << endl;
         }
 
         /*
@@ -85,7 +82,7 @@ class Complex {
         //vreal & vimag is the first number
         //obj is the second number
         Complex operator + (Complex const &obj) { 
-            Complex res; 
+            Complex res;
             res.vreal = vreal + obj.vreal; 
             res.vimag = vimag + obj.vimag;
             res.calculate(); 
@@ -127,9 +124,7 @@ Complex conjugate(Complex n) {
 }
 
 void declare_complex() {
-    string name; char form;
-    cout << "How do you want to call your complex number?: ";
-    cin >> name;
+    char form;
     cout << "Do you want to enter polar form or carthesian form (p || c)?: ";
     cin >> form;
     double amplitude, phase, real, imaginary;
@@ -138,7 +133,7 @@ void declare_complex() {
         cin >> amplitude;
         cout << "enter phase: ";
         cin >> phase;
-        Complex Number1 = Complex(name, amplitude, phase, 'p');
+        Complex Number1 = Complex(amplitude, phase, 'p');
         Number1.printNumber();
     }
     else if (form == 'c') {
@@ -146,7 +141,7 @@ void declare_complex() {
         cin >> real;
         cout << "enter imaginary part: ";
         cin >> imaginary;
-        Complex Number1 = Complex(name, real, imaginary, 'c');
+        Complex Number1 = Complex(real, imaginary, 'c');
         Number1.printNumber();
     }
     else {
@@ -156,13 +151,13 @@ void declare_complex() {
 }
 
 void overloading_test() {
-    Complex number1 = Complex("number1", 1, 1, 'c');
-    Complex number2 = Complex("number2", 2, 2, 'c');
-    Complex number3 = Complex("number3", 0, 0, 'c');
-    Complex number4 = Complex("number4", 0, 0, 'c');
-    Complex number5 = Complex("number5", 0, 0, 'c');
-    Complex number6 = Complex("number6", 0, 0, 'c');
-    Complex number7 = Complex("number7", 0, 0, 'c');
+    Complex number1 = Complex(2, 1, 'c');
+    Complex number2 = Complex(2, 9, 'c');
+    Complex number3 = Complex(0, 0, 'c');
+    Complex number4 = Complex(0, 0, 'c');
+    Complex number5 = Complex(0, 0, 'c');
+    Complex number6 = Complex(0, 0, 'c');
+    Complex number7 = Complex(0, 0, 'c');
     cout << "number1: " << endl;
     number1.printNumber();
     cout << endl << "number2: " << endl;
