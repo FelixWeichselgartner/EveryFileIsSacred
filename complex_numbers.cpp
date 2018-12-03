@@ -9,7 +9,11 @@ class Complex {
         double a, phi; //phi in degree
 
     public:
-        //Constructor
+        //standard constructor
+        Complex() {
+            vreal = vimag = a = phi = 0;
+        }
+        //general constructor
         Complex(double first = 0, double second = 0, char form = ' ') {
             if (form == 'p') {
                 a = first; phi = second;
@@ -86,7 +90,6 @@ class Complex {
             vimag = copy.vimag;
             a = copy.a;
             phi = copy.phi;
-
         }
 
         //Overload + operator to add to complex numbers
