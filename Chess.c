@@ -134,7 +134,6 @@ void show_board(char board[fieldsize][fieldsize][2]) {
 */
 
 int bishop_movement(char figure, char color, char board[fieldsize][fieldsize][2], int s_from, int z_from, int s_to, int z_to) {
-	//if (board[z_to][s_to][1] == color) { color is false
 	if (board[z_to][s_to][1] == board[z_from][s_from][1]) {
 		return false;
 	}
