@@ -23,6 +23,8 @@ class Complex {
                 ;
             }
         }
+        
+        //could make those private
         void calculate() {
             const double pi = 3.14159265358979323846;
             a = sqrt(vreal * vreal + vimag * vimag);
@@ -77,6 +79,15 @@ class Complex {
             return res; 
         }
         */
+
+        //Kopierkonstruktor
+        Complex(const Complex &copy) {
+            vreal = copy.vreal;
+            vimag = copy.vimag;
+            a = copy.a;
+            phi = copy.phi;
+
+        }
 
         //Overload + operator to add to complex numbers
         //vreal & vimag is the first number
@@ -180,8 +191,15 @@ void overloading_test() {
     return;
 }
 
+void copy_test() {
+    Complex number2 = Complex(2, 9, 'c');
+    Complex number3 = number2;
+    number3.printNumber();
+}
+
 int main() {
     //declare_complex();
-    overloading_test();
+    //overloading_test();
+    copy_test();
     return 0;
 }
