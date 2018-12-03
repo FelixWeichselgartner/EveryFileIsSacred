@@ -9,12 +9,12 @@ class Complex {
         double a, phi; //phi in degree
 
     public:
-        //standard constructor
+        //default constructor
         Complex() {
             vreal = vimag = a = phi = 0;
         }
         //general constructor
-        Complex(double first = 0, double second = 0, char form = ' ') {
+        Complex(double first, double second, char form) {
             if (form == 'p') {
                 a = first; phi = second;
                 calculate2();
