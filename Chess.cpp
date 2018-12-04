@@ -404,8 +404,15 @@ class Board {
         Piece *board[fieldsize][fieldsize];
 
     public:
-        Piece getBoard() {
-            
+		Piece copy_board[fieldsize][fieldsize];
+        Piece * getBoard() {
+			for(int i = 0; i < fieldsize; i++) {
+				for(int k = 0; k < fieldsize; k++) {
+					copy_board[i][k].setPiece(board[i][k]->getPiece);
+					copy_board[i][k].setPiece(board[i][k]->getPiece);
+				}
+			}
+			return &copy_board[0][0];
         }
 
         Board() {
@@ -468,6 +475,40 @@ class Board {
             board[7][7] = new Rook(ROOK, BLACK);
         }
 
+		void change_place(char figure, char c, int z, int s) {
+			switch(figure) {
+                case PAWN: {
+					board[z][s] = new Pawn(PAWN, c);
+                    break;
+                }
+                case ROOK: {
+					board[z][s] = new Rook(ROOK, c);
+                    break;
+                }
+                case KNIGHT: {
+					board[z][s] = new Knight(KNIGHT, c);
+                    break;
+                }
+                case BISHOP: {
+					board[z][s] = new Bishop(BISHOP, c);
+                    break;
+                }
+                case KING: {
+					board[z][s] = new King(KING, c);
+                    break;
+                }
+                case QUEEN: {
+					board[z][s] = new Queen(QUEEN, c);
+                    break;
+                }
+				case EMPTY: {
+					board[z][s] = new Piece();
+					break;
+				}
+                default: break;
+            }
+		}
+
         void print_board() {
             HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
             for (int k = 7, l = 8; k >= 0; k--, l--) {
@@ -487,74 +528,11 @@ class Board {
 	            }
             cout << "   ----------------" << endl << "   A B C D E F G H" << endl;
         }
-        
-        
-};
 
-/*
-* class Chess contains:
-* attributes:
-* - the current turn
-* methods:
-* + gameloop
-* + input function
-* + check function
-*/
-class Chess {
-    private:
-        int turn; //0 is white, 1 is black
-
-    public:
-    
-        int input(int z_from, int z_to, int s_from, int s_to) {
-            int help = 0;
-	        char S_from, S_to;
-            cout << "which figure do you want to move?: ";
-            cin >> S_from >> z_from;
-	        if (S_from == '+' && z_from == 1)
-	        	return 11;
-	        if (z_from < 0 || z_from > 8 || S_from > 'H' || S_from < 'A')
-	        	return 44;
-	        s_from = S_from - 65; z_from -= 1;
-	        if (board[z_from][s_from][0] == EMPTY)
-	        	return 45;
-	        #if _TURN_ //turn control not compiled if _TURN_ == false
-	        	if (amount % 2 == 1 && board[z_from][s_from][1] == black || amount % 2 == 0 && board[z_from][s_from][1] == white) {
-	        		return 42;
-	        	}
-	        #endif
-            cout << "where do you want to move it to?: ";
-            cin >> S_to >> z_to;
-	        if (z_to < 0 || z_to > 8 || S_to > 'H' || S_to < 'A')
-	        	return 44;
-	        s_to = S_to - 65; z_to -= 1; //convert input in the fitting array-format
-
-
-
-            //split in gameloop
-	        #if _CHECK_ //check function not compiled if _CHECK_ == false
-	        	if ((check(board[z_from][s_from][0], board[z_from][s_from][1], board, s_from, z_from, s_to, z_to)) == false) //checks if figures can move that way
-	        		return 43;
-	        #endif
-	        if (board[z_to][s_to][0] == KING && board[z_to][s_to][1] == WHITE)
-	        	help = -1;
-	        if (board[z_to][s_to][0] == KING && board[z_to][s_to][1] == BLACK)
-	        	help = 1;
-	        board[z_to][s_to][0] = board[z_from][s_from][0];
-	        board[z_to][s_to][1] = board[z_from][s_from][1];
-	        board[z_from][s_from][0] = EMPTY;
-	        board[z_from][s_from][1] = NONE;
-	        if (help == 1)
-	        	return 1;
-	        if (help == -1)
-	        	return -1;
-	        return 0;
-        }
-        
-        int check() {
+		int check(char figure) {
             switch(figure) {
                 case PAWN: {
-
+					
                     break;
                 }
                 case ROOK: {
@@ -575,10 +553,83 @@ class Chess {
                 default: break;
             }
         }
+        
+};
+
+/*
+* class Chess contains:
+* attributes:
+* - the current turn
+* methods:
+* + gameloop
+* + input function
+* + check function
+*/
+class Chess {
+    private:
+        int turn; //0 is white, 1 is black
+
+    public:
+        int input(int *z_from, int *z_to, int *s_from, int *s_to) {
+	        char S_from, S_to;
+            cout << "which figure do you want to move?: ";
+            cin >> S_from >> *z_from;
+	        if (S_from == '+' && *z_from == 1)
+	        	return 11;
+	        if (*z_from < 0 || *z_from > 8 || S_from > 'H' || S_from < 'A')
+	        	return 44;
+	        *s_from = S_from - 65; *z_from -= 1;
+	        if (board[z_from][s_from][0] == EMPTY)
+	        	return 45;
+	        #if _TURN_ //turn control not compiled if _TURN_ == false
+	        	if (amount % 2 == 1 && board[z_from][s_from][1] == black || amount % 2 == 0 && board[z_from][s_from][1] == white) {
+	        		return 42;
+	        	}
+	        #endif
+            cout << "where do you want to move it to?: ";
+            cin >> S_to >> *z_to;
+	        if (*z_to < 0 || *z_to > 8 || S_to > 'H' || S_to < 'A')
+	        	return 44;
+	        *s_to = S_to - 65; *z_to -= 1; //convert input in the fitting array-format
+	        return 0;
+        }
+
+		int winner(Piece board[fieldsize][fieldsize], int z_from, int z_to, int s_from, int s_to) {
+			int help;
+			if (board[z_to][s_to].getPiece() == KING && board[z_to][s_to].getColor() == WHITE)
+	        		help = -1;
+	        	if (board[z_to][s_to].getPiece() == KING && board[z_to][s_to].getColor() == BLACK)
+	        		help = 1;
+	        	if (help == 1)
+	        		return 1;
+	        	if (help == -1)
+	        		return -1;
+				return 0;
+		}
+
+		void change(Board NewBoard, Piece board[fieldsize][fieldsize], int z_from, int z_to, int s_from, int s_to) {
+			NewBoard.change_place(board[z_from][s_from].getPiece(), board[z_from][s_from].getColor(), z_to, s_to);
+			NewBoard.change_place(EMPTY, NONE, z_from, s_from);
+		}
 
         bool gameloop() {
+			int win = 0, z_from, z_to, s_from, s_to;
             Board NewBoard;
+			Piece b[fieldsize][fieldsize];
             NewBoard.print_board();
+			while (win == 0) {
+				&b[0][0] = NewBoard.getBoard();
+				win = winner(NewBoard.getBoard(), z_from, z_to, s_from, s_to);
+				input(&z_from, &z_to, &s_from, &s_to);
+				//change(NewBoard, NewBoard.getBoard(), z_from, z_to, s_from, s_to);
+				NewBoard.change_place(board[z_from][s_from].getPiece(), board[z_from][s_from].getColor(), z_to, s_to);
+				NewBoard.change_place(EMPTY, NONE, z_from, s_from);
+				//split in gameloop
+	        	check();
+	        		
+			}
+
+			return true;
         }
 };
 
