@@ -53,6 +53,9 @@ class Piece {
         Piece(char p, char c) {
             piece = p; color = c;
         }
+		virtual bool movement(int z_from, int z_to, int s_from, int s_to){
+			;
+		}
         char getPiece() {
             return piece;
         }
@@ -96,7 +99,7 @@ class Pawn: public Piece {
         	return c;
         }
 
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
             int beat = false, flag = 0;
             if (s_from != s_to) {
 	    		if ((s_from == s_to + 1 || s_from == s_to - 1) && (z_to == z_from + 1) && !(board[z_to][s_to][0] == ' ') && board[z_from][s_from][1] == white) { //columns can be different if your figure is going to beat another
@@ -169,7 +172,7 @@ class Rook: public virtual Piece {
         /*
         doesnt fit on cpp version yet
         */
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
             if (board[z_to][s_to][1] == color) {
 	        	return false;
 	        }
@@ -212,7 +215,7 @@ class Knight: public Piece {
         /*
         doesnt fit on cpp version yet
         */
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
             if (board[z_to][z_from][1] == color) {
 		    	return false;
 		    }
@@ -256,7 +259,7 @@ class Bishop: public virtual Piece {
         /*
         doesnt fit on cpp version yet
         */
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
 	        if (board[z_to][s_to][1] == board[z_from][s_from][1]) {
 	        	return false;
 	        }
@@ -343,7 +346,7 @@ class King: public Piece {
         /*
         doesnt fit on cpp version yet
         */
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
             if (z_to != z_from + 1 && z_to != z_from - 1 && s_to != s_from + 1 && s_to != s_from - 1) {
 		    	return false;
 		    }
@@ -371,22 +374,22 @@ class Queen: public Rook, public Bishop {
         /*
         doesnt fit on cpp version yet
         */
-        bool movement() {
+        bool movement(int z_from, int z_to, int s_from, int s_to) {
             if (z_from != z_to && s_from != s_to) { //bishop movement in here
-			    if (Bishop::movement() == true) {
+			    if (Bishop::movement(z_from, z_to, s_from, s_to) == true) {
 				    return true;
 			    } else {
 				    return false;
 			    }
 		    }
 		    if (z_from == z_to || s_from == s_to) { //tower movement in here
-			    if (Rook::movement() == true) {
+			    if (Rook::movement(z_from, z_to, s_from, s_to) == true) {
 				    return true;
 			    } else {
 				    return false;
 			    }
 		    }
-		    return true;
+		    return false;
         }
 };
 
@@ -401,6 +404,7 @@ class Queen: public Rook, public Bishop {
 */
 class Board {
     private:
+		//might be a good a idea to make the board public
         Piece *board[fieldsize][fieldsize];
 
     public:
@@ -529,10 +533,12 @@ class Board {
             cout << "   ----------------" << endl << "   A B C D E F G H" << endl;
         }
 
-		int check(char figure) {
-            switch(figure) {
+		int check(int z_from, int z_to, int s_from, int s_to) {
+			board[z_from][s_from]->movement(z_from, z_to, s_from, s_to);
+			/*
+            switch(board[z_from][s_from]->getPiece()) {
                 case PAWN: {
-					
+						board[z_from][s_from]->movement();
                     break;
                 }
                 case ROOK: {
@@ -552,6 +558,7 @@ class Board {
                 }
                 default: break;
             }
+			*/
         }
         
 };
@@ -571,26 +578,26 @@ class Chess {
 
     public:
         int input(int *z_from, int *z_to, int *s_from, int *s_to) {
-	        char S_from, S_to;
-            cout << "which figure do you want to move?: ";
-            cin >> S_from >> *z_from;
-	        if (S_from == '+' && *z_from == 1)
-	        	return 11;
-	        if (*z_from < 0 || *z_from > 8 || S_from > 'H' || S_from < 'A')
-	        	return 44;
-	        *s_from = S_from - 65; *z_from -= 1;
-	        if (board[z_from][s_from][0] == EMPTY)
-	        	return 45;
-	        #if _TURN_ //turn control not compiled if _TURN_ == false
-	        	if (amount % 2 == 1 && board[z_from][s_from][1] == black || amount % 2 == 0 && board[z_from][s_from][1] == white) {
-	        		return 42;
-	        	}
-	        #endif
-            cout << "where do you want to move it to?: ";
-            cin >> S_to >> *z_to;
-	        if (*z_to < 0 || *z_to > 8 || S_to > 'H' || S_to < 'A')
-	        	return 44;
-	        *s_to = S_to - 65; *z_to -= 1; //convert input in the fitting array-format
+			char S_from, S_to;
+			do {
+            	cout << "which figure do you want to move?: ";
+            	cin >> S_from >> *z_from;
+	        	if (S_from == '+' && *z_from == 1)
+	        		return 11;
+	        	if (*z_from < 0 || *z_from > 8 || S_from > 'H' || S_from < 'A')
+	        		return 44;
+	        	*s_from = S_from - 65; *z_from -= 1;
+	        	if (board[z_from][s_from][0] == EMPTY)
+	        		return 45;
+	        	#if _TURN_ //turn control not compiled if _TURN_ == false
+	        		if (amount % 2 == 1 && board[z_from][s_from][1] == black || amount % 2 == 0 && board[z_from][s_from][1] == white) {
+	        			return 42;
+	        		}
+	        	#endif
+            	cout << "where do you want to move it to?: ";
+            	cin >> S_to >> *z_to;
+	        	*s_to = S_to - 65; *z_to -= 1; //convert input in the fitting array-format
+			} while(*z_to < 0 || *z_to > 8 || S_to > 'H' || S_to < 'A');
 	        return 0;
         }
 
@@ -598,13 +605,13 @@ class Chess {
 			int help;
 			if (board[z_to][s_to].getPiece() == KING && board[z_to][s_to].getColor() == WHITE)
 	        		help = -1;
-	        	if (board[z_to][s_to].getPiece() == KING && board[z_to][s_to].getColor() == BLACK)
-	        		help = 1;
-	        	if (help == 1)
-	        		return 1;
-	        	if (help == -1)
-	        		return -1;
-				return 0;
+	        if (board[z_to][s_to].getPiece() == KING && board[z_to][s_to].getColor() == BLACK)
+	        	help = 1;
+	        if (help == 1)
+				return 1; //WHITE WON
+	        if (help == -1)
+	        	return -1; //BLACK WON
+			return 0; //NOBDY WON YET
 		}
 
 		void change(Board NewBoard, Piece board[fieldsize][fieldsize], int z_from, int z_to, int s_from, int s_to) {
@@ -612,24 +619,21 @@ class Chess {
 			NewBoard.change_place(EMPTY, NONE, z_from, s_from);
 		}
 
-        bool gameloop() {
+        int gameloop() {
 			int win = 0, z_from, z_to, s_from, s_to;
             Board NewBoard;
-			Piece b[fieldsize][fieldsize];
-            NewBoard.print_board();
-			while (win == 0) {
-				&b[0][0] = NewBoard.getBoard();
-				win = winner(NewBoard.getBoard(), z_from, z_to, s_from, s_to);
+			Piece * b[fieldsize][fieldsize];
+			do {
+				NewBoard.print_board();
+				&b[0][0] = NewBoard.getBoard(); //hmmm 
 				input(&z_from, &z_to, &s_from, &s_to);
+				NewBoard.check(z_from, z_to, s_from, s_to);
+				win = winner(NewBoard.getBoard(), z_from, z_to, s_from, s_to);
 				//change(NewBoard, NewBoard.getBoard(), z_from, z_to, s_from, s_to);
 				NewBoard.change_place(board[z_from][s_from].getPiece(), board[z_from][s_from].getColor(), z_to, s_to);
 				NewBoard.change_place(EMPTY, NONE, z_from, s_from);
-				//split in gameloop
-	        	check();
-	        		
-			}
-
-			return true;
+			} while (win == 0);
+			return win;
         }
 };
 
@@ -637,7 +641,13 @@ int main() {
     Chess NewGame;
     bool endofgame;
     endofgame = NewGame.gameloop();
+	switch(endofgame) {
+		case 1: cout << "white won";
+		case -1: cout << "black won";
+		default: cout << "error accured";
+	}
 
+	
     int wait;
     cin >> wait;
     return 0;
