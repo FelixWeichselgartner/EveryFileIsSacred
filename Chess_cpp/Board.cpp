@@ -85,7 +85,7 @@ bool Board::check(Board NewBoard, int z_from, int z_to, int s_from, int s_to) {
 	return temp;
 }
 int Board::winner(int z_from, int z_to, int s_from, int s_to) {
-	int help;
+	int help = 0;
 	if (board[z_to][s_to]->getPiece() == KING && board[z_to][s_to]->getColor() == WHITE)
     		help = -1;
     if (board[z_to][s_to]->getPiece() == KING && board[z_to][s_to]->getColor() == BLACK)

@@ -19,7 +19,7 @@ Piece::Piece(char p, char c) {
 }
 
 bool Piece::movement(Board *NewBoard, int z_from, int z_to, int s_from, int s_to){
-	;
+	return false;
 }
 
 char Piece::getPiece() {
@@ -311,7 +311,7 @@ void Pawn::pawn_transformation(Board *NewBoard, char newFigure, char c, int z, i
 
 bool Pawn::movement(Board *NewBoard, int z_from, int z_to, int s_from, int s_to) {
     int beat = false, flag = 0, z, s;
-	char newFigure, c;
+	char newFigure;
     if (s_from != s_to) {
 		if ((s_from == s_to + 1 || s_from == s_to - 1) && (z_to == z_from + 1) && !(NewBoard->board[z_to][s_to]->getPiece() == EMPTY) && NewBoard->board[z_from][s_from]->getColor() == WHITE) { //columns can be different if your figure is going to beat another
 			beat = true;

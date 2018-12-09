@@ -4,7 +4,7 @@
 *  all rights reserved
 **************************************************************
 *  Date of creating this file: 02.12.2018
-*  Last changes: 03.12.2018
+*  Last changes: 07.12.2018
 *  creator: Felix Weichselgartner
 *  purpose: learning OOP
 **************************************************************
@@ -41,7 +41,7 @@ class Chess {
 
     public:
 		Chess();
-        int input(Board, int *, int *, int *, int *, int);
+        bool input(Board, int *, int *, int *, int *, int);
         int gameloop();
 };
 
@@ -49,7 +49,7 @@ Chess::Chess() {
 	turn = 1;
 }
 
-int Chess::input(Board NewBoard, int *z_from, int *z_to, int *s_from, int *s_to, int turn) {
+bool Chess::input(Board NewBoard, int *z_from, int *z_to, int *s_from, int *s_to, int turn) {
 	char S_from, S_to;
 
 	//this is for checking the color
@@ -60,9 +60,9 @@ int Chess::input(Board NewBoard, int *z_from, int *z_to, int *s_from, int *s_to,
     	cout << "which figure do you want to move?: ";
     	cin >> S_from >> *z_from;
     	if (S_from == '+' && *z_from == 1)
-    		return 11;
+    		return false;
     	if (*z_from < 0 || *z_from > 8 || S_from > 'H' || S_from < 'A')
-    		return 44;
+    		return false;
     	*s_from = S_from - 65; *z_from -= 1;
 		if(((turn % 2 == 1) && newBoard->board[*z_from][*s_from]->getColor() == BLACK) || ((turn % 2 == 0) && newBoard->board[*z_from][*s_from]->getColor() == WHITE))
 			return false; //return color false
