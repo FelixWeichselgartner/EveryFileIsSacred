@@ -16,19 +16,19 @@
 //for debugging with vs_code:
 //"program": "${workspaceFolder}/a star pathfinding algorithm/${fileBasenameNoExtension}.exe",    ---for debugging with vscode
 
+//compile command for gcc:
+//g++ .\a-star-pathfinding-algorithm.cpp .\fweichsel_header\fweichsel.c -o .\a-star-pathfinding-algorithm.exe
+
 #include <iostream>
 using namespace std;
+#include <conio.h>
 #include <ctime>
+#include <windows.h>
+#include "fweichsel_header/fweichsel.h"
 
 #define x 9
 #define y 9
 const char EMPTY = 176;
-
-int absolute(int n) {
-	if (n >= 0)
-		return n;
-	else return -n;
-}
 
 class pathfinding {
 
@@ -61,7 +61,11 @@ class pathfinding {
         //no need to consider again
         bool closed;
 
-		//add parents here
+		//parent field to go back to when path did not work out
+        int parent_x;
+        int parent_y;
+        int parent_count;
+
 
     public:
         values() {content = EMPTY; G = 0; H = 0; F = 0; open = false; closed = false;}
@@ -69,17 +73,23 @@ class pathfinding {
         void setH(int h) {H = h;}
         void calcF() {F = G + H;}
         void setContent(int c) {content = c;}
-        void setOpen(bool b) {open = b;};
-        void setClosed(bool b) {closed = b;};
+        void setOpen(bool b) {open = b;}
+        void setClosed(bool b) {closed = b;}
+        void setParent(int a, int b) {parent_x = a; parent_y = b;}
+        void setParentCount(int a) {parent_count = a;}
         int getG() {return G;}
         int getH() {return H;}
         int getF() {return F;}
-        char getContent() {return content;} //this causes problems
+        char getContent() {return content;}
         bool getOpen() {return open;}
         bool getClosed() {return closed;}
+        int getParentX() {return parent_x;}
+        int getParentY() {return parent_y;}
+        int getParentCount() {return parent_count;}
     };
 
 private:
+    //the array to look through is an array of the type values
     class values arr[x][y];
 
     //those are the start coordinates
@@ -109,22 +119,29 @@ public:
     int getCurrentY() {return current_pos_y;}
     int getCount() {return count;}
 
+    //calculates the G cost
     int calcG(int newX, int newY) {
-		return count; //probably wrong
+		return count;
 		//not correct if jumping back to a parent
 		//when path was wrong
     }
 
+    //this function calculates the Manhattan Distance of two points
+    //https://en.wikipedia.org/wiki/Taxicab_geometry
     int ManhattanDistance(int newX, int newY) {
         int deltaX = absolute(end_x - newX);
         int deltaY = absolute(end_y - newY);
         return deltaX + deltaY;
     }
 
+    //calculates the H cost
     int calcH(int newX, int newY) {
         return ManhattanDistance(newX, newY);
     }
 
+    //give the order to calculate G, H and F
+    //F = G + H
+    //returns the cost of F
     int calc(int newX, int newY) {
         arr[newX][newY].setG(calcG(newX, newY));
         arr[newX][newY].setH(calcH(newX, newY));
@@ -132,6 +149,7 @@ public:
         return arr[newX][newY].getF();
     }
 
+    //checks whether the fields around are possible to move at
     int possible(int newX, int newY) {
         if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= 8 && newX >= 0 && newY <= 8 && newX >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
@@ -146,19 +164,21 @@ public:
         }
     }
 
+    //just the basic bubblesort algorithm
     void bubblesort_down(int *a, int length) {
-	int i, j, tmp;
-	for (i = length - 1; i > 0; i--) {
-			for (j = 0; j < i; j++) {
-				if (a[j] < a[j + 1]) {
-				    tmp = a[j];
-				    a[j] = a[j + 1];
-				    a[j + 1] = tmp;
-			    }
-		    }
-	}
+	    int i, j, tmp;
+	    for (i = length - 1; i > 0; i--) {
+	    	for (j = 0; j < i; j++) {
+	    		if (a[j] < a[j + 1]) {
+	    			tmp = a[j];
+	    			a[j] = a[j + 1];
+	    			a[j + 1] = tmp;
+	    		}
+	    	}
+	    }
     }
 
+    //returns the smallest value of the surrounding fields
     int smallest_value(int n1, int n2, int n3, int n4) {
 		int a[4] = {n1, n2, n3, n4};
 		bubblesort_down(a, 4);
@@ -180,17 +200,21 @@ public:
 		}
     }
 
+    //checks the surrounding fields
+    //return value tells whether the end was found or not
     bool surrounding(int newX, int newY) {
         if (arr[current_pos_x][current_pos_y].getContent() == 'E')
             return true;
         bool right = false, left = false, up = false, down = false;
         bool flag = false;
-        int small;
+        int vsmall;
         int r = -1, l = -1, u = -1, d = -1;
+
         right = possible(newX + 1, newY);
         left = possible(newX - 1, newY);
         up = possible(newX, newY + 1);
         down = possible(newX, newY - 1);
+
         if (right) {
             r = calc(newX + 1, newY);
         }
@@ -203,6 +227,7 @@ public:
         if (down) {
             d = calc(newX, newY - 1);
         }
+
         if (r < l && r < u && r < d && right) {
             //the field right to the original field has the smallest F value
             current_pos_x++;
@@ -227,29 +252,32 @@ public:
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        //values could be equal
+
+        //if the values of two fields are equal
         if (flag == false) {
-            small = smallest_value(r, l, u, d);
-			if (small == -1) {
+            vsmall = smallest_value(r, l, u, d);
+			if (vsmall == -1) {
 				//cout << "error";
 				return false;
 			}
-            if (r == small && right) {
+            if (r == vsmall && right) {
                 current_pos_x++;
                 arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (l == small && left) {
+            } else if (l == vsmall && left) {
                 current_pos_x--;
                 arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (u == small && up) {
+            } else if (u == vsmall && up) {
                 current_pos_y++;
                 arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (d == small && down) {
+            } else if (d == vsmall && down) {
                 current_pos_y--;
                 arr[current_pos_x][current_pos_y].setClosed(true);
             }
         }
+
         count++;
-		cout << count << endl;
+		//cout << count << endl;
+
         if (r == 2 || l == 2 || u == 2 || d == 2) {
             return true;
         } else {
@@ -257,17 +285,25 @@ public:
         }
     }
 
+    //this starts the search loop
     bool find() {
         bool finished = false;
         do {
             finished = surrounding(current_pos_x, current_pos_y);
+
+            //optional:
+            //just if you want to look what the algorithm is doing
+            system("cls");
             print();
+            delay(500);
+
         } while (!finished && count < 10000);
         if (count >= 1000)
             return false;
         return true;
     }
 
+    //prints the array to the console
     void print() {
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
@@ -293,14 +329,17 @@ int main() {
     }
     path.print();
     if (!path.find()) {
+        system("cls");
         cout << "pathfinding was not succesfull!" << endl;
     }
+    system("cls");
     cout << "pathfinding was succesfull" << endl;
     path.print();
     cout << "The amount of iterations needed: " << path.getCount() << endl;
 	cout << "The time needed: " << (double)difftime(time(0), start) << " seconds" << endl;
 
-	bool b;
-	cin >> b;
+    //program stays open
+    cout << endl << "press any button to close the program" << endl;
+	getch();
     return 0;
 }

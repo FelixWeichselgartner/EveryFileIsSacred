@@ -106,8 +106,8 @@ void read_string(char *string) {
 	gets(string);
 }
 
-void read_string_scanf(char *string); {
-	printf("enter a string: ";)
+void read_string_scanf(char *string) {
+	printf("enter a string: ");
 	scanf("%[^\n]s", string);
 }
 
@@ -117,11 +117,13 @@ int fibonacci(int n) {
 	return fibonacci(n-1) + fibonacci(n-2);
 }
 
-#ifndef F_(X)_
-#define F_(X)_
+#ifndef F_X_
+#define F_X_
+
 float f(int x) {
 	return exp(x);
 }
+
 #endif
 
 float integrate(float a, float b, int n) {
