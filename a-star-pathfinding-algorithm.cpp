@@ -164,20 +164,6 @@ public:
         }
     }
 
-    //just the basic bubblesort algorithm
-    void bubblesort_down(int *a, int length) {
-	    int i, j, tmp;
-	    for (i = length - 1; i > 0; i--) {
-	    	for (j = 0; j < i; j++) {
-	    		if (a[j] < a[j + 1]) {
-	    			tmp = a[j];
-	    			a[j] = a[j + 1];
-	    			a[j + 1] = tmp;
-	    		}
-	    	}
-	    }
-    }
-
     //returns the smallest value of the surrounding fields
     int smallest_value(int n1, int n2, int n3, int n4) {
 		int a[4] = {n1, n2, n3, n4};
