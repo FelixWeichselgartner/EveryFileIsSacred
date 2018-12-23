@@ -17,8 +17,11 @@
 **************************************************************
 */
 
+//compile command: g++ Chess.cpp Board.cpp Pieces.cpp -o Chess.exe
+
 #include <iostream>
 #include <windows.h>
+#include <conio.h>
 #include "Pieces.hpp"
 #include "Board.hpp"
 using namespace std;
@@ -108,7 +111,6 @@ int main() {
 		default: cout << "error accured" << endl;
 	}
 	cout << "press any button to close the game!" << endl;
-    int wait;
-    cin >> wait;
+    getch();
     return 0;
 }
