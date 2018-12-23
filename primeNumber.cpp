@@ -66,7 +66,7 @@ namespace calculate {
         void printPrimeNumbers() {
             cout << "Calculated Prime Numbers: " << endl;
             for (int i = 0; i < AmountOfPrimeNumbersToCalculate; i++) {
-                cout << KnownPrimeNumbers[i] << endl;
+                cout << KnownPrimeNumbers[i] << " | ";
             }
         }
     };
