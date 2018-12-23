@@ -13,6 +13,7 @@
 *  https://github.com/FelixWeichselgartner/EveryFileIsSacred
 **************************************************************
 *  Calculates the amount of primes numbers you tell it to
+*  easy algorithm only took about 30 minutes to program
 **************************************************************
 */
 
@@ -75,7 +76,7 @@ int main() {
     time_t start = time(0);
     class calculate::calcPrimeNumbers newRun = calculate::calcPrimeNumbers();
     newRun.calc();
-    newRun.printPrimeNumbers();
     cout << "The amount of time needed to calculate " << AmountOfPrimeNumbersToCalculate << " prime numbers: " << (double)difftime(time(0), start) << " seconds" << endl;
+    newRun.printPrimeNumbers();
     return 0;
 }
