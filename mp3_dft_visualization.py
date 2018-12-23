@@ -85,11 +85,11 @@ def normTo8Bit(array):
     """norms an array to a value range of 0 <= value <= 8
     
     Arguments:
-        array {array} -- integer array is devided by 20 000 by standard - by the highest value if a value is higher than 20 000
+        array {array} -- integer array is devided by 25'000 by standard - by the highest value if a value is higher than 25'000
     """
 
-    norm = 20000
-    if highestValue(array) > 20000:
+    norm = 25000
+    if highestValue(array) > 25000:
             norm = highestValue(array)
     for x in range(0, 8):
         array[x] = int(array[x]/norm*8)
@@ -120,7 +120,9 @@ def main():
     print(f'the number of frames per second = {framespersecond}')
     print(f'the song has {channel_count} channels')
 
-    part = song[:5000]
+    part = song[35000:40000]
+
+    print(f'length of the current part {len(part)/1000} seconds')
 
     #do for loop here through all parts of the song
 
