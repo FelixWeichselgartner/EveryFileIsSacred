@@ -35,7 +35,16 @@ import ffmpeg
 #download https://ffmpeg.zeranoe.com/builds/
 #and add to path
 
-def plot(filename, signal, fourier, length, maximum):
+def plot(filename, signal, fourier, maximum):
+    """plots the original signal along with the frequencies of that signal
+    
+    Arguments:
+        filename {string} -- the name of the mp3 you opened -> is used to save plot to png
+        signal {array} -- an array in which your signal data is stored
+        fourier {array} -- an array in which the fourier coefficients of your signal is stored
+        maximum {integer} -- the maximum y and -y of the signal and therefore the coordinate system
+    """
+
     plt.figure(1)
 
     s = plt.subplot(211)  # signal
@@ -57,6 +66,15 @@ def plot(filename, signal, fourier, length, maximum):
     plt.clf() 
 
 def highestValue(array):
+    """returns the hightest value of an array
+    
+    Arguments:
+        array {array} -- the array to search the highest value in
+    
+    Returns:
+        integer -- this is the highest value
+    """
+
     value = 0
     for x in range(0, 8):
         if array[x] > value:
@@ -64,6 +82,12 @@ def highestValue(array):
     return value
 
 def normTo8Bit(array):
+    """norms an array to a value range of 0 <= value <= 8
+    
+    Arguments:
+        array {array} -- integer array is devided by 20 000 by standard - by the highest value if a value is higher than 20 000
+    """
+
     norm = 20000
     if highestValue(array) > 20000:
             norm = highestValue(array)
@@ -72,6 +96,13 @@ def normTo8Bit(array):
 
     
 def main():
+    """
+    reads in a file and converts it to an array of values
+    those are then transformed with the DFT (discrete fourier transformation)
+    then the DFT array is divided in N different pieces all of same length
+    those are then normed to 0 <= value <= 8 to be displayed on an led Matrix with size 8 on 8
+    """
+
     filename = 'inmymind.mp3'
     #filename = input('what is your filename?')
 
@@ -97,7 +128,7 @@ def main():
     
     fourier = abs(np.fft.rfft(signal))
 
-    #plot(filename, signal, fourier, len(part), part.max)
+    #plot(filename, signal, fourier, part.max)
 
     #8*8 led matrix
     xlength = 8
