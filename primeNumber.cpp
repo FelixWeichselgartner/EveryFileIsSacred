@@ -47,13 +47,13 @@ namespace calculate {
             } else {
                 //current problem: does not find any prime numbers - infinit loop
                 for (int i = 1, k = start; i < AmountOfPrimeNumbersToCalculate; k++) {
-                    divide = k - 1;
                     Prime = true;
-                    while (Prime == true && divide > 1) {
+                    divide = 2;
+                    while (Prime == true && divide < k) {
                         if (possiblePrimeNumber(k, divide) == false) {
                             Prime = false;
                         }
-                        divide--;
+                        divide++;
                     }
                     if (Prime == true) {
                         KnownPrimeNumbers[i] = k;
