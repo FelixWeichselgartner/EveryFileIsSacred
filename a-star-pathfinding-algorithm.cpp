@@ -4,7 +4,7 @@
 *  all rights reserved
 **************************************************************
 *  Date of creating this file: 10.12.2018
-*  Last changes: 10.12.2018
+*  Last changes: 24.12.2018
 *  creator: Felix Weichselgartner
 *  purpose: learning pathfinding algorithms
 **************************************************************
@@ -14,7 +14,7 @@
 */
 
 //for debugging with vs_code:
-//"program": "${workspaceFolder}/a star pathfinding algorithm/${fileBasenameNoExtension}.exe",    ---for debugging with vscode
+//"program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
 
 //compile command for gcc:
 //g++ .\a-star-pathfinding-algorithm.cpp .\fweichsel_header\fweichsel.c -o .\a-star-pathfinding-algorithm.exe
@@ -151,7 +151,7 @@ public:
 
     //checks whether the fields around are possible to move at
     int possible(int newX, int newY) {
-        if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= 8 && newX >= 0 && newY <= 8 && newX >= 0)) { //out of map
+        if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= 8 && newX >= 0 && newY <= 8 && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
                 return 2;
                 arr[newX][newY].setClosed(true);
@@ -214,25 +214,25 @@ public:
             d = calc(newX, newY - 1);
         }
 
-        if (r < l && r < u && r < d && right) {
+        if ((r < l || l == false) && (r < u || up == false) && (r < d || d == false) && right) {
             //the field right to the original field has the smallest F value
             current_pos_x++;
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        if (l < r && l < u && l < d && left) {
+        if ((l < r || r == false) && (l < u || u == false) && (l < d || down == false) && left) {
             //the field left to the original field has the smallest F value
             current_pos_x--;
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        if (u < d && u < r && u < l && up) {
+        if ((u < d || down == false) && (u < r || right == false) && (u < l || left == false) && up) {
             //the field over to the original field has the smallest F value
             current_pos_y++;
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        if (d < u && d < r && d < l && down) {
+        if ((d < u || u == false) && (d < r || right == false) && (d < l || left == false) && down) {
             //the field under to the original field has the smallest F value
             current_pos_y--;
             arr[current_pos_x][current_pos_y].setClosed(true);
@@ -282,6 +282,7 @@ public:
             system("cls");
             print();
             delay(500);
+            //end of optional
 
         } while (!finished && count < 10000);
         if (count >= 1000)
@@ -308,10 +309,10 @@ public:
 int main() {
 	time_t start = time(0);
     class pathfinding path;
-    path.setStartValue(4, 2); //not working with 8 0
-    path.setEndValue(4, 7); //              and  0 8
-    for(int i = 0; i < 3; i++) {
-        path.setWall(i + 3, 4);
+    path.setStartValue(0, 3);
+    path.setEndValue(7, 7);
+    for (int i = 0; i < 8; i++) {
+        path.setWall(i + 1, 4);
     }
     path.print();
     if (!path.find()) {

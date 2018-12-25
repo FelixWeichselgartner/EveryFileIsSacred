@@ -4,7 +4,7 @@
 *  all rights reserved
 **************************************************************
 *  Date of creating this file: 23.12.2018
-*  Last changes: 23.12.2018
+*  Last changes: 24.12.2018
 *  creator: Felix Weichselgartner
 *  purpose: trying out a selfmade
 *           prime number calculating algorithm
@@ -20,7 +20,7 @@
 #include <iostream>
 using namespace std;
 #include <ctime>
-#define AmountOfPrimeNumbersToCalculate 10000
+#define AmountOfPrimeNumbersToCalculate 30000
 
 namespace calculate {
     class calcPrimeNumbers {
@@ -45,7 +45,6 @@ namespace calculate {
             if (AmountOfPrimeNumbersToCalculate < 1) {
                 return;
             } else {
-                //current problem: does not find any prime numbers - infinit loop
                 for (int i = 1, k = start; i < AmountOfPrimeNumbersToCalculate; k++) {
                     Prime = true;
                     divide = 2;
@@ -77,6 +76,6 @@ int main() {
     class calculate::calcPrimeNumbers newRun = calculate::calcPrimeNumbers();
     newRun.calc();
     cout << "The amount of time needed to calculate " << AmountOfPrimeNumbersToCalculate << " prime numbers: " << (double)difftime(time(0), start) << " seconds" << endl;
-    newRun.printPrimeNumbers();
+    //newRun.printPrimeNumbers();
     return 0;
 }
