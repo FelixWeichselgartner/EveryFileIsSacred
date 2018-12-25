@@ -73,7 +73,7 @@ def main():
     * In the list there should be old string and new string divided by a ;.
     * example:
     *          old string; new string\n
-    * The skript read all the translation in a Matrix.
+    * The skript reads all the translations in a Matrix.
     * It then searches the exchange_file for the old strings and replaces them with the new ones
     """
 
