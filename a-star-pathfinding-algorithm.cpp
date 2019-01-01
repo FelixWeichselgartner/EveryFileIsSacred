@@ -104,10 +104,15 @@ private:
     //counts how much runs through the loop were needed
     int count;
 
+	//how much steps to the end
+	int steps;
+
 public:
-    pathfinding() {count = 1;}
+	pathfinding() { count = 1; steps = 1; }
     void setStartValue(int startx, int starty) {
         start_x = current_pos_x = startx; start_y = current_pos_y = starty; 
+        arr[start_x][start_y].setParent(startx, starty);
+        arr[start_x][start_y].setParentCount(0);
         arr[start_x][start_y].setContent('S'); 
         arr[start_x][start_y].setClosed(true);
     }
@@ -118,13 +123,12 @@ public:
     int getCurrentX() {return current_pos_x;}
     int getCurrentY() {return current_pos_y;}
     int getCount() {return count;}
+	int getSteps() { return steps; }
 
     //calculates the G cost
-    int calcG(int newX, int newY) {
-		return count;
-		//not correct if jumping back to a parent
-		//when path was wrong
-    }
+	int calcG(int newX, int newY) {
+		return steps;
+	}
 
     //this function calculates the Manhattan Distance of two points
     //https://en.wikipedia.org/wiki/Taxicab_geometry
@@ -157,6 +161,8 @@ public:
                 arr[newX][newY].setClosed(true);
             }
             arr[newX][newY].setOpen(true);
+            arr[newX][newY].setParent(current_pos_x, current_pos_y);
+            arr[newX][newY].setParentCount(steps);
             
             return 1;
         } else {
@@ -186,6 +192,22 @@ public:
 		}
     }
 
+    void searchOpen(int *a, int *b) {
+        for (int i = 0; i < x; i++) {
+            for (int k = 0; k < y; k++) {
+                if (arr[i][k].getOpen() && arr[i][k].getClosed() == false) {
+                    *a = i;
+                    *b = k;
+                }
+            }
+        }
+    }
+
+	void Parent(int xx, int yy, int px, int py) {
+		arr[xx][yy].setParent(px, py);
+		arr[xx][yy].setParentCount(steps);
+	}
+
     //checks the surrounding fields
     //return value tells whether the end was found or not
     bool surrounding(int newX, int newY) {
@@ -195,6 +217,7 @@ public:
         bool flag = false;
         int vsmall;
         int r = -1, l = -1, u = -1, d = -1;
+        int px, py;
 
         right = possible(newX + 1, newY);
         left = possible(newX - 1, newY);
@@ -213,28 +236,38 @@ public:
         if (down) {
             d = calc(newX, newY - 1);
         }
+        if (right == false && left == false && up == false && down == false) {
+            searchOpen(&px, &py);
+            current_pos_x = arr[px][py].getParentX();
+            current_pos_y = arr[px][py].getParentY();
+            steps = arr[px][py].getParentCount();
+        }
 
         if ((r < l || l == false) && (r < u || up == false) && (r < d || d == false) && right) {
             //the field right to the original field has the smallest F value
             current_pos_x++;
+            Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
         if ((l < r || r == false) && (l < u || u == false) && (l < d || down == false) && left) {
             //the field left to the original field has the smallest F value
             current_pos_x--;
+            Parent(current_pos_x + 1, current_pos_y, current_pos_x, current_pos_y);
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
         if ((u < d || down == false) && (u < r || right == false) && (u < l || left == false) && up) {
             //the field over to the original field has the smallest F value
             current_pos_y++;
+            Parent(current_pos_x, current_pos_y - 1, current_pos_x, current_pos_y);
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
         if ((d < u || u == false) && (d < r || right == false) && (d < l || left == false) && down) {
             //the field under to the original field has the smallest F value
             current_pos_y--;
+            Parent(current_pos_x, current_pos_y + 1, current_pos_x, current_pos_y);
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
@@ -248,19 +281,28 @@ public:
 			}
             if (r == vsmall && right) {
                 current_pos_x++;
+                Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
                 arr[current_pos_x][current_pos_y].setClosed(true);
             } else if (l == vsmall && left) {
                 current_pos_x--;
+                Parent(current_pos_x + 1, current_pos_y, current_pos_x, current_pos_y);
                 arr[current_pos_x][current_pos_y].setClosed(true);
             } else if (u == vsmall && up) {
                 current_pos_y++;
+                Parent(current_pos_x, current_pos_y - 1, current_pos_x, current_pos_y);
                 arr[current_pos_x][current_pos_y].setClosed(true);
             } else if (d == vsmall && down) {
                 current_pos_y--;
+                Parent(current_pos_x, current_pos_y + 1, current_pos_x, current_pos_y);
                 arr[current_pos_x][current_pos_y].setClosed(true);
             }
         }
 
+        if (count == 35) {
+            cout << "wow awesome" << endl;
+        }
+
+		steps++;
         count++;
 		//cout << count << endl;
 
@@ -279,9 +321,9 @@ public:
 
             //optional:
             //just if you want to look what the algorithm is doing
-            system("cls");
+            //system("cls");
             print();
-            delay(500);
+            delay(100);
             //end of optional
 
         } while (!finished && count < 10000);
@@ -323,6 +365,7 @@ int main() {
     cout << "pathfinding was succesfull" << endl;
     path.print();
     cout << "The amount of iterations needed: " << path.getCount() << endl;
+	cout << "The amount of steps needed: " << path.getSteps() << endl;
 	cout << "The time needed: " << (double)difftime(time(0), start) << " seconds" << endl;
 
     //program stays open
