@@ -1,6 +1,6 @@
 /**
  **************************************************************
- * C header for handling dynamical arrays
+ * C header for handling linked lists
  **************************************************************
  * Copyright (c) 2019 Felix Weichselgartner
  * all rights reserved
@@ -9,17 +9,22 @@
  *  https://github.com/FelixWeichselgartner/EveryFileIsSacred
  **************************************************************
  * Date of creating these files: 04.01.2019
- *  Last changes: 04.01.2019
+ *  Last changes: 05.01.2019
  *  creator: Felix Weichselgartner
  *  purpose: easier memory allocation for
- *           dynamical arrays in C
+ *           linked lists in C
  **************************************************************
  */
 
-#ifndef DYN_ARR_
-#define DYN_ARR_
+#ifndef LINKED_LIST_
+#define LINKED_LIST_
 
+#include <stdlib.h>
+
+#ifndef DTYPES_1_
+#define DTYPES_1_
 extern const char mINT, mFLOAT, mDOUBLE, mCHAR, mSTRING, mEMPTY;
+#endif
 
 union mData {
     int intData;

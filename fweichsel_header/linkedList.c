@@ -3,7 +3,10 @@
 #include <conio.h>
 #include "linkedList.h"
 
+#ifndef DTYPES_2_
+#define DTYPES_2_
 const char mINT = 'i', mFLOAT = 'f', mDOUBLE = 'd', mCHAR = 'c', mSTRING = 's', mEMPTY = 'e';
+#endif
 
 void printData(struct tData d) {
     if (d.dtype == mINT) {
