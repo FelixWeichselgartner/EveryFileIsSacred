@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-#include "dynArr.h"
+#include "linkedList.h"
 
 const char mINT = 'i', mFLOAT = 'f', mDOUBLE = 'd', mCHAR = 'c', mSTRING = 's', mEMPTY = 'e';
 

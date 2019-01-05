@@ -4,7 +4,9 @@ char *gets(char *buffer); //unsave functions can be used this way
 
 #include <stdio.h>
 #include <conio.h>
-#include "dynArr.h"
+#include "linkedList.h"
+
+//compile command for gcc: gcc .\USAGE_OF_linkedList.c .\linkedList.c -o .\USAGE_OF_linkedList.exe
 
 void main() {
     //startPointer and endPointer
@@ -53,6 +55,21 @@ void main() {
 	printData(getElementOfArray);
 	//or simply
 	//printData(getElement(startPtr, 1));
+
+    //change the second element of the array
+    myData.mdata.floatData = 3.14;
+    myData.dtype = mFLOAT;
+    setElement(&startPtr, myData, 1);
+
+    //delete the first element of the array
+    deleteElement(&startPtr, &endPtr, 0);
+
+    //the first element is now:
+	printf("\nthe first element of the array is: \n");
+	printData(getElement(startPtr, 0));
+
+    //delete all elements before leaving the program
+    deleteAllElements(&startPtr, &endPtr);
 
 	//program stays open in the end
 	printf("\nclose by pressing anything");
