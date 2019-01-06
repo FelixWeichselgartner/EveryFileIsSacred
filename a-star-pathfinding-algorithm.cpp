@@ -26,7 +26,7 @@ using namespace std;
 #include <windows.h>
 #include "fweichsel_header/fweichsel.h"
 
-#define x 9
+#define x 13
 #define y 9
 const char EMPTY = 176;
 
@@ -62,6 +62,7 @@ class pathfinding {
         bool closed;
 
 		//parent field to go back to when path did not work out
+        int parentGcost;
         int parent_x;
         int parent_y;
         int parent_count;
@@ -80,6 +81,8 @@ class pathfinding {
         int getG() {return G;}
         int getH() {return H;}
         int getF() {return F;}
+        int getParentG() {return parentGcost;}
+        void setParentG(int a) {parentGcost = a;}
         char getContent() {return content;}
         bool getOpen() {return open;}
         bool getClosed() {return closed;}
@@ -127,6 +130,7 @@ public:
 
     //calculates the G cost
 	int calcG(int newX, int newY) {
+        //might be a good idea to refer G cost to parent field
 		return steps;
 	}
 
@@ -155,7 +159,7 @@ public:
 
     //checks whether the fields around are possible to move at
     int possible(int newX, int newY) {
-        if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= 8 && newX >= 0 && newY <= 8 && newY >= 0)) { //out of map
+        if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
                 return 2;
                 arr[newX][newY].setClosed(true);
@@ -192,6 +196,8 @@ public:
 		}
     }
 
+    //searches for an open field
+    //to add: with the lowest F cost
     void searchOpen(int *a, int *b) {
         for (int i = 0; i < x; i++) {
             for (int k = 0; k < y; k++) {
@@ -203,6 +209,7 @@ public:
         }
     }
 
+    //adding parent information to a field
 	void Parent(int xx, int yy, int px, int py) {
 		arr[xx][yy].setParent(px, py);
 		arr[xx][yy].setParentCount(steps);
@@ -243,14 +250,14 @@ public:
             steps = arr[px][py].getParentCount();
         }
 
-        if ((r < l || l == false) && (r < u || up == false) && (r < d || d == false) && right) {
+        if ((r < l || left == false) && (r < u || up == false) && (r < d || down == false) && right) {
             //the field right to the original field has the smallest F value
             current_pos_x++;
             Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        if ((l < r || r == false) && (l < u || u == false) && (l < d || down == false) && left) {
+        if ((l < r || right == false) && (l < u || up == false) && (l < d || down == false) && left) {
             //the field left to the original field has the smallest F value
             current_pos_x--;
             Parent(current_pos_x + 1, current_pos_y, current_pos_x, current_pos_y);
@@ -264,7 +271,7 @@ public:
             arr[current_pos_x][current_pos_y].setClosed(true);
             flag = true;
         }
-        if ((d < u || u == false) && (d < r || right == false) && (d < l || left == false) && down) {
+        if ((d < u || up == false) && (d < r || right == false) && (d < l || left == false) && down) {
             //the field under to the original field has the smallest F value
             current_pos_y--;
             Parent(current_pos_x, current_pos_y + 1, current_pos_x, current_pos_y);
@@ -298,7 +305,7 @@ public:
             }
         }
 
-        if (count == 35) {
+        if (count == 8) {
             cout << "wow awesome" << endl;
         }
 

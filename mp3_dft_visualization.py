@@ -31,7 +31,8 @@ from pydub import AudioSegment
 from pydub.playback import play
 #pip install ffmpeg-python
 import ffmpeg
-#for windows: 
+#pip install ffmpeg
+#+ for windows: 
 #download https://ffmpeg.zeranoe.com/builds/
 #and add to path
 
