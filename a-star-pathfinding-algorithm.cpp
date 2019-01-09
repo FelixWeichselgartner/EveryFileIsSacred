@@ -67,7 +67,6 @@ class pathfinding {
         int parent_y;
         int parent_count;
 
-
     public:
         values() {content = EMPTY; G = 0; H = 0; F = 0; open = false; closed = false;}
         void setG(int g) {G = g;}
@@ -144,7 +143,6 @@ public:
     int getCount() {return count;}
 	int getSteps() { return steps; }
 
-    //
 	/**
 	 * @brief  calculates the G cost
 	 * @note   
@@ -265,7 +263,6 @@ public:
             }
         }
     }
-
 
 	/**
 	 * @brief  adding parent information to a field
