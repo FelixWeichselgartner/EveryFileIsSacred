@@ -67,7 +67,6 @@ class pathfinding {
         int parent_y;
         int parent_count;
 
-
     public:
         values() {content = EMPTY; G = 0; H = 0; F = 0; open = false; closed = false;}
         void setG(int g) {G = g;}
@@ -112,6 +111,14 @@ private:
 
 public:
 	pathfinding() { count = 1; steps = 1; }
+
+    /**
+     * @brief  sets the start value for the pathfinding
+     * @note   
+     * @param  startx: x value of start point
+     * @param  starty: y value of start point
+     * @retval None
+     */
     void setStartValue(int startx, int starty) {
         start_x = current_pos_x = startx; start_y = current_pos_y = starty; 
         arr[start_x][start_y].setParent(startx, starty);
@@ -119,6 +126,14 @@ public:
         arr[start_x][start_y].setContent('S'); 
         arr[start_x][start_y].setClosed(true);
     }
+
+    /**
+     * @brief  sets the start value for the pathfinding
+     * @note   
+     * @param  endx: x value of end point
+     * @param  endy: y value of end point
+     * @retval None
+     */
     void setEndValue(int endx, int endy) {end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E');}
     void setCurrentX(int setx) {current_pos_x = setx;}
     void setCurrentY(int sety) {current_pos_y = sety;}
@@ -128,28 +143,49 @@ public:
     int getCount() {return count;}
 	int getSteps() { return steps; }
 
-    //calculates the G cost
+	/**
+	 * @brief  calculates the G cost
+	 * @note   
+	 * @param  newX: x value of the field to calculate g cost for
+	 * @param  newY: y value of the field to calculate g cost for
+	 * @retval g cost for field
+	 */
 	int calcG(int newX, int newY) {
         //might be a good idea to refer G cost to parent field
 		return steps;
 	}
 
-    //this function calculates the Manhattan Distance of two points
-    //https://en.wikipedia.org/wiki/Taxicab_geometry
+    /**
+     * @brief  this function calculates the Manhattan Distance of two points
+     * @note   https://en.wikipedia.org/wiki/Taxicab_geometry
+     * @param  newX: x value of field to calculate manhattan distance for
+     * @param  newY: y value of field to calculate manhattan distance for
+     * @retval manhattan distance for field
+     */
     int ManhattanDistance(int newX, int newY) {
         int deltaX = absolute(end_x - newX);
         int deltaY = absolute(end_y - newY);
         return deltaX + deltaY;
     }
 
-    //calculates the H cost
+    /**
+     * @brief  calculates the H cost
+     * @note   
+     * @param  newX: x value of the field to calculate h cost for
+     * @param  newY: y value of the field to calculate h cost for
+     * @retval h cost for the field
+     */
     int calcH(int newX, int newY) {
         return ManhattanDistance(newX, newY);
     }
 
-    //give the order to calculate G, H and F
-    //F = G + H
-    //returns the cost of F
+    /**
+     * @brief  give the order to calculate G, H and F
+     * @note   F = G + H
+     * @param  newX: x value of the field to calculate cost for
+     * @param  newY: y value of the field to calculate cost for
+     * @retval returns the cost of F
+     */
     int calc(int newX, int newY) {
         arr[newX][newY].setG(calcG(newX, newY));
         arr[newX][newY].setH(calcH(newX, newY));
@@ -157,7 +193,13 @@ public:
         return arr[newX][newY].getF();
     }
 
-    //checks whether the fields around are possible to move at
+    /**
+     * @brief  checks whether the fields around are possible to move at
+     * @note   
+     * @param  newX: x value to check if moving there is possible
+     * @param  newY: y value to check if moving there is possible
+     * @retval 2 = End; 1 = possible; 0 = not possible
+     */
     int possible(int newX, int newY) {
         if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
@@ -174,7 +216,15 @@ public:
         }
     }
 
-    //returns the smallest value of the surrounding fields
+    /**
+     * @brief  returns the smallest value of the surrounding fields
+     * @note   
+     * @param  n1: f cost of right field
+     * @param  n2: f cost of left field
+     * @param  n3: f cost of up field
+     * @param  n4: f cost of down field
+     * @retval the smallest the 4 values
+     */
     int smallest_value(int n1, int n2, int n3, int n4) {
 		int a[4] = {n1, n2, n3, n4};
 		bubblesort_down(a, 4);
@@ -196,8 +246,13 @@ public:
 		}
     }
 
-    //searches for an open field
-    //to add: with the lowest F cost
+    /**
+     * @brief  searches for an open field
+     * @note   to add: with the lowest F cost
+     * @param  *a: pointer to a value to write x value of open field to
+     * @param  *b: pointer to a value to write y value of open field to
+     * @retval None
+     */
     void searchOpen(int *a, int *b) {
         for (int i = 0; i < x; i++) {
             for (int k = 0; k < y; k++) {
@@ -209,14 +264,27 @@ public:
         }
     }
 
-    //adding parent information to a field
+	/**
+	 * @brief  adding parent information to a field
+	 * @note   
+	 * @param  xx: x of current field
+	 * @param  yy: y of current field
+	 * @param  px: x of parent field
+	 * @param  py: y of parent field
+	 * @retval None
+	 */
 	void Parent(int xx, int yy, int px, int py) {
 		arr[xx][yy].setParent(px, py);
 		arr[xx][yy].setParentCount(steps);
 	}
 
-    //checks the surrounding fields
-    //return value tells whether the end was found or not
+    /**
+     * @brief  checks the surrounding fields
+     * @note   
+     * @param  newX: x value of the field to check
+     * @param  newY: y value of the field to check
+     * @retval true = end was found; false = end wasn't found
+     */
     bool surrounding(int newX, int newY) {
         if (arr[current_pos_x][current_pos_y].getContent() == 'E')
             return true;
@@ -334,7 +402,11 @@ public:
         }
     }
 
-    //this starts the search loop
+    /**
+     * @brief  this starts the search loop
+     * @note   
+     * @retval true = path was found; false = no path was found
+     */
     bool find() {
         bool finished = false;
         do {
@@ -353,7 +425,11 @@ public:
         return true;
     }
 
-    //prints the array to the console
+    /**
+     * @brief  prints the array to the console
+     * @note   
+     * @retval None
+     */
     void print() {
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
@@ -391,6 +467,6 @@ int main() {
 
     //program stays open
     cout << endl << "press any button to close the program" << endl;
-	getch();
+    getch();
     return 0;
 }
