@@ -220,17 +220,23 @@ public:
     bool surrounding(int newX, int newY) {
         if (arr[current_pos_x][current_pos_y].getContent() == 'E')
             return true;
+
+        //variable definitions:
+        //bool right left up down -- right if possible, false if not
+        //int r l u p -- F cost of the richt left up or down field
         bool right = false, left = false, up = false, down = false;
         bool flag = false;
         int vsmall;
         int r = -1, l = -1, u = -1, d = -1;
         int px, py;
 
+        //checking for possible options
         right = possible(newX + 1, newY);
         left = possible(newX - 1, newY);
         up = possible(newX, newY + 1);
         down = possible(newX, newY - 1);
 
+        //calculating the F cost for every possible direction
         if (right) {
             r = calc(newX + 1, newY);
         }
@@ -243,6 +249,9 @@ public:
         if (down) {
             d = calc(newX, newY - 1);
         }
+
+        //if no option is possible jump back to a parent field
+        //delete this and use actual a star pathfinding
         if (right == false && left == false && up == false && down == false) {
             searchOpen(&px, &py);
             current_pos_x = arr[px][py].getParentX();
@@ -250,6 +259,7 @@ public:
             steps = arr[px][py].getParentCount();
         }
 
+        //check whether one f cost is smaller than all the others
         if ((r < l || left == false) && (r < u || up == false) && (r < d || down == false) && right) {
             //the field right to the original field has the smallest F value
             current_pos_x++;
@@ -279,13 +289,15 @@ public:
             flag = true;
         }
 
-        //if the values of two fields are equal
+        //if the values of two fields are equal and no smallest valued could be identified
         if (flag == false) {
+            //search the smallest value with bubblesort
             vsmall = smallest_value(r, l, u, d);
 			if (vsmall == -1) {
 				//cout << "error";
 				return false;
 			}
+            //take a direction that has the smallest value
             if (r == vsmall && right) {
                 current_pos_x++;
                 Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
@@ -305,9 +317,11 @@ public:
             }
         }
 
+        /*
         if (count == 8) {
             cout << "wow awesome" << endl;
         }
+        */
 
 		steps++;
         count++;
