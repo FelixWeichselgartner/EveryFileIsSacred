@@ -150,9 +150,16 @@ public:
 	 * @param  newY: y value of the field to calculate g cost for
 	 * @retval g cost for field
 	 */
-	int calcG(int newX, int newY) {
+	int calcG(int xx, int yy, int newX, int newY) {
         //might be a good idea to refer G cost to parent field
-		return steps;
+        int xp = xx, yp = yy;
+        int amount = 1;
+        do {
+            xp = arr[xp][yp].getParentX(); //doesnt have one yet
+            yp = arr[xp][yp].getParentY(); //segmentation fault by 1 2 from 1 3
+            amount++;
+        } while(xp != start_x && yp != start_y);
+		return amount + 1;
 	}
 
     /**
@@ -186,12 +193,26 @@ public:
      * @param  newY: y value of the field to calculate cost for
      * @retval returns the cost of F
      */
-    int calc(int newX, int newY) {
-        arr[newX][newY].setG(calcG(newX, newY));
+    int calc(int xx, int yy, int newX, int newY) {
+        arr[newX][newY].setG(calcG(xx, yy, newX, newY));
         arr[newX][newY].setH(calcH(newX, newY));
         arr[newX][newY].calcF();
         return arr[newX][newY].getF();
     }
+
+    /**
+	 * @brief  adding parent information to a field
+	 * @note   
+	 * @param  xx: x of current field
+	 * @param  yy: y of current field
+	 * @param  px: x of parent field
+	 * @param  py: y of parent field
+	 * @retval None
+	 */
+	void Parent(int xx, int yy, int px, int py) {
+		arr[px][py].setParent(xx, yy); //changed px and xx && py and yy
+		arr[px][py].setParentCount(steps);
+	}
 
     /**
      * @brief  checks whether the fields around are possible to move at
@@ -200,16 +221,14 @@ public:
      * @param  newY: y value to check if moving there is possible
      * @retval 2 = End; 1 = possible; 0 = not possible
      */
-    int possible(int newX, int newY) {
+    int possible(int xx, int yy, int newX, int newY) {
         if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
+                arr[newX][newY].setParent(xx, yy);
                 return 2;
-                arr[newX][newY].setClosed(true);
             }
             arr[newX][newY].setOpen(true);
-            arr[newX][newY].setParent(current_pos_x, current_pos_y);
-            arr[newX][newY].setParentCount(steps);
-            
+            Parent(xx, yy, newX, newY);
             return 1;
         } else {
             return 0;
@@ -264,20 +283,6 @@ public:
         }
     }
 
-	/**
-	 * @brief  adding parent information to a field
-	 * @note   
-	 * @param  xx: x of current field
-	 * @param  yy: y of current field
-	 * @param  px: x of parent field
-	 * @param  py: y of parent field
-	 * @retval None
-	 */
-	void Parent(int xx, int yy, int px, int py) {
-		arr[xx][yy].setParent(px, py);
-		arr[xx][yy].setParentCount(steps);
-	}
-
     /**
      * @brief  checks the surrounding fields
      * @note   
@@ -286,120 +291,89 @@ public:
      * @retval true = end was found; false = end wasn't found
      */
     bool surrounding(int newX, int newY) {
-        if (arr[current_pos_x][current_pos_y].getContent() == 'E')
-            return true;
-
         //variable definitions:
         //bool right left up down -- right if possible, false if not
         //int r l u p -- F cost of the richt left up or down field
-        bool right = false, left = false, up = false, down = false;
+        int right = false, left = false, up = false, down = false;
         bool flag = false;
         int vsmall;
         int r = -1, l = -1, u = -1, d = -1;
         int px, py;
 
         //checking for possible options
-        right = possible(newX + 1, newY);
-        left = possible(newX - 1, newY);
-        up = possible(newX, newY + 1);
-        down = possible(newX, newY - 1);
+        right = possible(newX, newY, newX + 1, newY);
+        left = possible(newX, newY, newX - 1, newY);
+        up = possible(newX, newY, newX, newY + 1);
+        down = possible(newX, newY, newX, newY - 1);
 
         //calculating the F cost for every possible direction
         if (right) {
-            r = calc(newX + 1, newY);
+            r = calc(newX, newY, newX + 1, newY);
         }
         if (left) {
-            l = calc(newX - 1, newY);
+            l = calc(newX, newY, newX - 1, newY);
         }
         if (up) {
-            u = calc(newX, newY + 1);
+            u = calc(newX, newY, newX, newY + 1);
         }
         if (down) {
-            d = calc(newX, newY - 1);
+            d = calc(newX, newY, newX, newY - 1);
         }
-
-        //if no option is possible jump back to a parent field
-        //delete this and use actual a star pathfinding
-        if (right == false && left == false && up == false && down == false) {
-            searchOpen(&px, &py);
-            current_pos_x = arr[px][py].getParentX();
-            current_pos_y = arr[px][py].getParentY();
-            steps = arr[px][py].getParentCount();
-        }
-
-        //check whether one f cost is smaller than all the others
-        if ((r < l || left == false) && (r < u || up == false) && (r < d || down == false) && right) {
-            //the field right to the original field has the smallest F value
-            current_pos_x++;
-            Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
-            arr[current_pos_x][current_pos_y].setClosed(true);
-            flag = true;
-        }
-        if ((l < r || right == false) && (l < u || up == false) && (l < d || down == false) && left) {
-            //the field left to the original field has the smallest F value
-            current_pos_x--;
-            Parent(current_pos_x + 1, current_pos_y, current_pos_x, current_pos_y);
-            arr[current_pos_x][current_pos_y].setClosed(true);
-            flag = true;
-        }
-        if ((u < d || down == false) && (u < r || right == false) && (u < l || left == false) && up) {
-            //the field over to the original field has the smallest F value
-            current_pos_y++;
-            Parent(current_pos_x, current_pos_y - 1, current_pos_x, current_pos_y);
-            arr[current_pos_x][current_pos_y].setClosed(true);
-            flag = true;
-        }
-        if ((d < u || up == false) && (d < r || right == false) && (d < l || left == false) && down) {
-            //the field under to the original field has the smallest F value
-            current_pos_y--;
-            Parent(current_pos_x, current_pos_y + 1, current_pos_x, current_pos_y);
-            arr[current_pos_x][current_pos_y].setClosed(true);
-            flag = true;
-        }
-
-        //if the values of two fields are equal and no smallest valued could be identified
-        if (flag == false) {
-            //search the smallest value with bubblesort
-            vsmall = smallest_value(r, l, u, d);
-			if (vsmall == -1) {
-				//cout << "error";
-				return false;
-			}
-            //take a direction that has the smallest value
-            if (r == vsmall && right) {
-                current_pos_x++;
-                Parent(current_pos_x - 1, current_pos_y, current_pos_x, current_pos_y);
-                arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (l == vsmall && left) {
-                current_pos_x--;
-                Parent(current_pos_x + 1, current_pos_y, current_pos_x, current_pos_y);
-                arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (u == vsmall && up) {
-                current_pos_y++;
-                Parent(current_pos_x, current_pos_y - 1, current_pos_x, current_pos_y);
-                arr[current_pos_x][current_pos_y].setClosed(true);
-            } else if (d == vsmall && down) {
-                current_pos_y--;
-                Parent(current_pos_x, current_pos_y + 1, current_pos_x, current_pos_y);
-                arr[current_pos_x][current_pos_y].setClosed(true);
-            }
-        }
-
-        /*
-        if (count == 8) {
-            cout << "wow awesome" << endl;
-        }
-        */
 
 		steps++;
         count++;
-		//cout << count << endl;
 
-        if (r == 2 || l == 2 || u == 2 || d == 2) {
+        if (right == 2 || left == 2 || up == 2 || down == 2) {
+            cout << "end found" << endl;
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * @brief  searches field with lowest f cost
+     * @note   
+     * @param  *xx: x value of field with lowest f cost
+     * @param  *yy: y value of field with lowest f cost
+     * @retval true = end found; false = end not found
+     */
+    bool lowestFcost(int &xx, int &yy) {
+        int temp, fcost;
+        bool flag = false, retval = false;
+
+        //get lowest f cost value
+        for (int i = 0; i < x; i++) {
+            for (int k = 0; k < y; k++) {
+                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
+                    temp = arr[k][i].getF();
+                    if (temp  < fcost) {
+                        fcost = temp;
+                    }
+                }
+            }
+        }
+
+        //new field are opened with lower f cost than temp
+        //does more than one iteration then
+        //calculate surrounding of all open fields with lowest f cost
+        for (int i = 0; i < x; i++) {
+            for (int k = 0; k < y; k++) {
+                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
+                    if (arr[k][i].getF() == fcost) {
+                        arr[k][i].setClosed(true);
+                        retval = surrounding(k, i);
+                        if (retval) {
+                            xx = k;
+                            yy = i;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -409,13 +383,27 @@ public:
      */
     bool find() {
         bool finished = false;
+        int endx, endy;
+
+        //surrounding of start position
+        if (count == 1) {
+            print();
+            finished = surrounding(start_x, start_y);
+            arr[start_x][start_y].setClosed(true);
+            if (finished) {
+                return true;
+            }
+        }
+
         do {
-            finished = surrounding(current_pos_x, current_pos_y);
+            //surrounding of open field with lowest f cost
+            finished = lowestFcost(endx, endy);
 
             //optional:
             //just if you want to look what the algorithm is doing
             //system("cls");
             print();
+            cout << endl;
             delay(100);
             //end of optional
 
@@ -433,8 +421,12 @@ public:
     void print() {
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
-                if (arr[k][i].getClosed() == true && arr[k][i].getContent() != '#') {
+                if (arr[k][i].getContent() == 'P') {
                     cout << "P";
+                } else if (arr[k][i].getClosed() == true && arr[k][i].getContent() != '#') {
+                    cout << "C";
+                } else if (arr[k][i].getOpen()) {
+                    cout << "O";
                 } else {
                     cout << arr[k][i].getContent();
                     //cout << arr[k][i].getContent() << "." << arr[k][i].getG() << "." << arr[k][i].getH() << "." << arr[k][i].getF() << "." << arr[k][i].getOpen() << "." << arr[k][i].getClosed() << " ";
@@ -442,6 +434,21 @@ public:
             }
             cout << endl;
         }
+    }
+
+    /**
+     * @brief  writes the path to the end in the matrix
+     * @note   calles function print to print the array
+     * @retval None
+     */
+    void printPathToEnd() {
+        int xp = end_x, yp = end_y;
+        do {
+            xp = arr[xp][yp].getParentX();
+            yp = arr[xp][yp].getParentY();
+            arr[xp][yp].setContent('P');
+        } while(xp != start_x && yp != start_y);
+		print();
     }
 };
 
@@ -453,11 +460,12 @@ int main() {
     for (int i = 0; i < 8; i++) {
         path.setWall(i + 1, 4);
     }
-    path.print();
+    
     if (!path.find()) {
         system("cls");
         cout << "pathfinding was not succesfull!" << endl;
     }
+    path.printPathToEnd();
     system("cls");
     cout << "pathfinding was succesfull" << endl;
     path.print();
