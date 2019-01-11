@@ -23,10 +23,11 @@
 using namespace std;
 #include <conio.h>
 #include <ctime>
+#include <fstream>
 #include <windows.h>
 
-#define x 13
-#define y 9
+#define x 37
+#define y 22
 const char EMPTY = 176;
 
 int absolute(int retval) {
@@ -364,12 +365,11 @@ public:
             //system("cls");
             print();
             cout << endl;
-            delay(100);
+            //delay(100);
             //end of optional
 
-        } while (!finished && count < 10000);
-        if (count >= 1000)
-            return false;
+        } while (!finished);
+        print();
         return true;
     }
 
@@ -430,26 +430,65 @@ public:
             xp = tempx; yp = tempy;
             arr[xp][yp].setContent('P');
         } while(xp != start_x && yp != start_y);
-        arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
+        //arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
 		print();
+    }
+
+    /**
+     * @brief  reads a maze from a text file
+     * @note   you might want to change the characters that represent the elements in your maze
+     * @retval None
+     */
+    void readMazeFromFile() {
+        fstream file;
+        char c;
+        int xindex = 0, yindex = 0;
+
+        file.open("asciiMaze.txt", fstream::in);
+        while(file.get(c)) {
+            if (c == 'S') {
+                setStartValue(xindex, yindex);
+            } else if (c == 'E') {
+                setEndValue(xindex, yindex);
+            } else if (c == ' ') {
+                arr[xindex][yindex].setContent(EMPTY);
+            } else if (c == '+' || c == '-' || c == '|') {
+                setWall(xindex, yindex);
+            }
+            xindex++;
+            if (c == '\n') {
+                xindex = 0;
+                yindex++;
+            }
+        }
+
+        file.close();
+        //print();
+        return;
     }
 };
 
 int main() {
 	time_t start = time(0);
     class pathfinding path;
+    path.readMazeFromFile();
+
+    /*
     path.setStartValue(0, 3);
     path.setEndValue(7, 7);
     for (int i = 0; i < 8; i++) {
         path.setWall(i + 1, 4);
     }
-    
+    */
+   
     if (!path.find()) {
         system("cls");
         cout << "pathfinding was not succesfull!" << endl;
     }
     path.printPathToEnd();
-    system("cls");
+    
+    
+    //system("cls");
     cout << "pathfinding was succesfull" << endl;
     path.print();
     cout << "The amount of iterations needed: " << path.getCount() << endl;
