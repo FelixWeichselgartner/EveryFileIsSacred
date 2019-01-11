@@ -387,9 +387,13 @@ public:
                     SetConsoleTextAttribute(hConsole, 9);
                     cout << "P";
                     SetConsoleTextAttribute(hConsole, 7);
-                } else if (arr[k][i].getContent() == 'S' || arr[k][i].getContent() == 'E') {
+                } else if (arr[k][i].getContent() == 'S') {
                     SetConsoleTextAttribute(hConsole, 6);
                     cout << "S";
+                    SetConsoleTextAttribute(hConsole, 7);
+                } else if (arr[k][i].getContent() == 'E') {
+                    SetConsoleTextAttribute(hConsole, 6);
+                    cout << "E";
                     SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getContent() == '#') {
                     SetConsoleTextAttribute(hConsole, 7);
