@@ -1,6 +1,6 @@
 /*
 **************************************************************
-*  Copyright (c) 2018 Felix Weichselgartner
+*  Copyright (c) 2018-2019 Felix Weichselgartner
 *  all rights reserved
 **************************************************************
 *  Date of creating this file: 10.12.2018
@@ -363,8 +363,9 @@ public:
             //optional:
             //just if you want to look what the algorithm is doing
             //system("cls");
-            print();
-            cout << endl;
+            //print();
+            cout << "#";
+            cout << endl; //somehow does not work without this line
             //delay(100);
             //end of optional
 
