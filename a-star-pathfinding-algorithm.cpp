@@ -17,18 +17,29 @@
 //"program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
 
 //compile command for gcc:
-//g++ .\a-star-pathfinding-algorithm.cpp .\fweichsel_header\fweichsel.c -o .\a-star-pathfinding-algorithm.exe
+//g++ .\a-star-pathfinding-algorithm.cpp -o .\a-star-pathfinding-algorithm.exe
 
 #include <iostream>
 using namespace std;
 #include <conio.h>
 #include <ctime>
 #include <windows.h>
-#include "fweichsel_header/fweichsel.h"
 
 #define x 13
 #define y 9
 const char EMPTY = 176;
+
+int absolute(int retval) {
+	if (retval >= 0)
+		return retval;
+	else return -retval;
+}
+
+void delay(int milli_seconds) {
+	clock_t start_time = clock();
+	while (clock() < start_time + milli_seconds)
+		;
+}
 
 class pathfinding {
 
@@ -67,6 +78,9 @@ class pathfinding {
         int parent_y;
         int parent_count;
 
+        //current run on the loop for calculating 
+        bool run;
+
     public:
         values() {content = EMPTY; G = 0; H = 0; F = 0; open = false; closed = false;}
         void setG(int g) {G = g;}
@@ -77,6 +91,7 @@ class pathfinding {
         void setClosed(bool b) {closed = b;}
         void setParent(int a, int b) {parent_x = a; parent_y = b;}
         void setParentCount(int a) {parent_count = a;}
+        void setRun(int r) { run = r; }
         int getG() {return G;}
         int getH() {return H;}
         int getF() {return F;}
@@ -88,6 +103,7 @@ class pathfinding {
         int getParentX() {return parent_x;}
         int getParentY() {return parent_y;}
         int getParentCount() {return parent_count;}
+        bool getRun() { return run; }
     };
 
 private:
@@ -101,16 +117,13 @@ private:
     int end_x, end_y;
 
     //this is the current position of the square calculated around
-    int current_pos_x; int current_pos_y;
+    int current_pos_x, current_pos_y;
 
     //counts how much runs through the loop were needed
     int count;
 
-	//how much steps to the end
-	int steps;
-
 public:
-	pathfinding() { count = 1; steps = 1; }
+	pathfinding() { count = 1; }
 
     /**
      * @brief  sets the start value for the pathfinding
@@ -134,14 +147,13 @@ public:
      * @param  endy: y value of end point
      * @retval None
      */
-    void setEndValue(int endx, int endy) {end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E');}
-    void setCurrentX(int setx) {current_pos_x = setx;}
-    void setCurrentY(int sety) {current_pos_y = sety;}
-    void setWall(int setx, int sety) {arr[setx][sety].setContent('#'); arr[setx][sety].setClosed(true);}
-    int getCurrentX() {return current_pos_x;}
-    int getCurrentY() {return current_pos_y;}
-    int getCount() {return count;}
-	int getSteps() { return steps; }
+    void setEndValue(int endx, int endy) { end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E'); }
+    void setCurrentX(int setx) { current_pos_x = setx; }
+    void setCurrentY(int sety) { current_pos_y = sety; }
+    void setWall(int setx, int sety) { arr[setx][sety].setContent('#'); arr[setx][sety].setClosed(true); }
+    int getCurrentX() { return current_pos_x; }
+    int getCurrentY() { return current_pos_y; }
+    int getCount() { return count; }
 
 	/**
 	 * @brief  calculates the G cost
@@ -150,13 +162,13 @@ public:
 	 * @param  newY: y value of the field to calculate g cost for
 	 * @retval g cost for field
 	 */
-	int calcG(int xx, int yy, int newX, int newY) {
+	int calcG(int xx, int yy) {
         //might be a good idea to refer G cost to parent field
         int xp = xx, yp = yy;
         int amount = 1;
         do {
-            xp = arr[xp][yp].getParentX(); //doesnt have one yet
-            yp = arr[xp][yp].getParentY(); //segmentation fault by 1 2 from 1 3
+            xp = arr[xp][yp].getParentX(); //returns bs for 0 4 so next cant work
+            yp = arr[xp][yp].getParentY(); //segmentation fault bs 4
             amount++;
         } while(xp != start_x && yp != start_y);
 		return amount + 1;
@@ -193,8 +205,8 @@ public:
      * @param  newY: y value of the field to calculate cost for
      * @retval returns the cost of F
      */
-    int calc(int xx, int yy, int newX, int newY) {
-        arr[newX][newY].setG(calcG(xx, yy, newX, newY));
+    int calc(int newX, int newY) {
+        arr[newX][newY].setG(calcG(newX, newY));
         arr[newX][newY].setH(calcH(newX, newY));
         arr[newX][newY].calcF();
         return arr[newX][newY].getF();
@@ -209,9 +221,8 @@ public:
 	 * @param  py: y of parent field
 	 * @retval None
 	 */
-	void Parent(int xx, int yy, int px, int py) {
-		arr[px][py].setParent(xx, yy); //changed px and xx && py and yy
-		arr[px][py].setParentCount(steps);
+	void Parent(int newX, int newY, int px, int py) {
+		arr[newX][newY].setParent(px, py); //changed px and xx && py and yy
 	}
 
     /**
@@ -224,62 +235,14 @@ public:
     int possible(int xx, int yy, int newX, int newY) {
         if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
-                arr[newX][newY].setParent(xx, yy);
+                Parent(newX, newY, xx, yy);
                 return 2;
             }
             arr[newX][newY].setOpen(true);
-            Parent(xx, yy, newX, newY);
+            Parent(newX, newY, xx, yy);
             return 1;
         } else {
             return 0;
-        }
-    }
-
-    /**
-     * @brief  returns the smallest value of the surrounding fields
-     * @note   
-     * @param  n1: f cost of right field
-     * @param  n2: f cost of left field
-     * @param  n3: f cost of up field
-     * @param  n4: f cost of down field
-     * @retval the smallest the 4 values
-     */
-    int smallest_value(int n1, int n2, int n3, int n4) {
-		int a[4] = {n1, n2, n3, n4};
-		bubblesort_down(a, 4);
-		if (a[3] == -1) {
-			if (a[2] == -1) {
-				if (a[1] == -1) {
-					return a[0];
-				}
-				else {
-					return a[1];
-				}
-			}
-			else {
-				return a[2];
-			}
-		}
-		else {
-			return a[3];
-		}
-    }
-
-    /**
-     * @brief  searches for an open field
-     * @note   to add: with the lowest F cost
-     * @param  *a: pointer to a value to write x value of open field to
-     * @param  *b: pointer to a value to write y value of open field to
-     * @retval None
-     */
-    void searchOpen(int *a, int *b) {
-        for (int i = 0; i < x; i++) {
-            for (int k = 0; k < y; k++) {
-                if (arr[i][k].getOpen() && arr[i][k].getClosed() == false) {
-                    *a = i;
-                    *b = k;
-                }
-            }
         }
     }
 
@@ -308,23 +271,19 @@ public:
 
         //calculating the F cost for every possible direction
         if (right) {
-            r = calc(newX, newY, newX + 1, newY);
+            r = calc(newX + 1, newY);
         }
         if (left) {
-            l = calc(newX, newY, newX - 1, newY);
+            l = calc(newX - 1, newY);
         }
         if (up) {
-            u = calc(newX, newY, newX, newY + 1);
+            u = calc(newX, newY + 1);
         }
         if (down) {
-            d = calc(newX, newY, newX, newY - 1);
+            d = calc(newX, newY - 1);
         }
 
-		steps++;
-        count++;
-
         if (right == 2 || left == 2 || up == 2 || down == 2) {
-            cout << "end found" << endl;
             return true;
         } else {
             return false;
@@ -338,15 +297,16 @@ public:
      * @param  *yy: y value of field with lowest f cost
      * @retval true = end found; false = end not found
      */
-    bool lowestFcost(int &xx, int &yy) {
+    bool lowestFcost() {
         int temp, fcost;
         bool flag = false, retval = false;
 
         //get lowest f cost value
-        for (int i = 0; i < x; i++) {
-            for (int k = 0; k < y; k++) {
+        for (int i = 0; i < y; i++) {
+            for (int k = 0; k < x; k++) {
                 if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
                     temp = arr[k][i].getF();
+                    arr[k][i].setRun(true);
                     if (temp  < fcost) {
                         fcost = temp;
                     }
@@ -357,21 +317,22 @@ public:
         //new field are opened with lower f cost than temp
         //does more than one iteration then
         //calculate surrounding of all open fields with lowest f cost
-        for (int i = 0; i < x; i++) {
-            for (int k = 0; k < y; k++) {
-                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
+        for (int i = 0; i < y; i++) {
+            for (int k = 0; k < x; k++) {
+                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false && arr[k][i].getRun()) {
+                    arr[k][i].setRun(false);
                     if (arr[k][i].getF() == fcost) {
                         arr[k][i].setClosed(true);
                         retval = surrounding(k, i);
                         if (retval) {
-                            xx = k;
-                            yy = i;
                             return true;
                         }
                     }
                 }
             }
         }
+
+        count++;
         
         return false;
     }
@@ -383,13 +344,12 @@ public:
      */
     bool find() {
         bool finished = false;
-        int endx, endy;
 
         //surrounding of start position
         if (count == 1) {
-            print();
             finished = surrounding(start_x, start_y);
             arr[start_x][start_y].setClosed(true);
+            print();
             if (finished) {
                 return true;
             }
@@ -397,7 +357,7 @@ public:
 
         do {
             //surrounding of open field with lowest f cost
-            finished = lowestFcost(endx, endy);
+            finished = lowestFcost();
 
             //optional:
             //just if you want to look what the algorithm is doing
@@ -419,21 +379,37 @@ public:
      * @retval None
      */
     void print() {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hConsole, 7);
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
                 if (arr[k][i].getContent() == 'P') {
+                    SetConsoleTextAttribute(hConsole, 9);
                     cout << "P";
-                } else if (arr[k][i].getClosed() == true && arr[k][i].getContent() != '#') {
-                    cout << "C";
-                } else if (arr[k][i].getOpen()) {
+                    SetConsoleTextAttribute(hConsole, 7);
+                } else if (arr[k][i].getContent() == 'S' || arr[k][i].getContent() == 'E') {
+                    SetConsoleTextAttribute(hConsole, 6);
+                    cout << "S";
+                    SetConsoleTextAttribute(hConsole, 7);
+                } else if (arr[k][i].getContent() == '#') {
+                    SetConsoleTextAttribute(hConsole, 7);
+                    cout << "#";
+                } else if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
+                    SetConsoleTextAttribute(hConsole, 10);
                     cout << "O";
-                } else {
+                    SetConsoleTextAttribute(hConsole, 7);
+                } else if (arr[k][i].getClosed() && arr[k][i].getContent() != '#') {
+                    SetConsoleTextAttribute(hConsole, 4);
+                    cout << "C";
+                    SetConsoleTextAttribute(hConsole, 7);
+                } else if (arr[k][i].getContent() == EMPTY) {
+                    SetConsoleTextAttribute(hConsole, 7);
                     cout << arr[k][i].getContent();
-                    //cout << arr[k][i].getContent() << "." << arr[k][i].getG() << "." << arr[k][i].getH() << "." << arr[k][i].getF() << "." << arr[k][i].getOpen() << "." << arr[k][i].getClosed() << " ";
                 }
             }
             cout << endl;
         }
+        SetConsoleTextAttribute(hConsole, 7);
     }
 
     /**
@@ -443,11 +419,14 @@ public:
      */
     void printPathToEnd() {
         int xp = end_x, yp = end_y;
+        int tempx = end_x, tempy = end_y;
         do {
-            xp = arr[xp][yp].getParentX();
-            yp = arr[xp][yp].getParentY();
+            tempx = arr[xp][yp].getParentX();
+            tempy = arr[xp][yp].getParentY();
+            xp = tempx; yp = tempy;
             arr[xp][yp].setContent('P');
         } while(xp != start_x && yp != start_y);
+        arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
 		print();
     }
 };
@@ -470,7 +449,6 @@ int main() {
     cout << "pathfinding was succesfull" << endl;
     path.print();
     cout << "The amount of iterations needed: " << path.getCount() << endl;
-	cout << "The amount of steps needed: " << path.getSteps() << endl;
 	cout << "The time needed: " << (double)difftime(time(0), start) << " seconds" << endl;
 
     //program stays open
