@@ -4,13 +4,18 @@
 *  all rights reserved
 **************************************************************
 *  Date of creating this file: 10.12.2018
-*  Last changes: 24.12.2018
+*  Last changes: 11.01.2019
 *  creator: Felix Weichselgartner
 *  purpose: learning pathfinding algorithms
 **************************************************************
 *  This is a pathfinding algorithm 
 *  based on the A* (a star) algorithm
 **************************************************************
+*/
+
+/*
+to do:
+    in function print: line 373: program does not work without the cout << endl;
 */
 
 //for debugging with vs_code:
@@ -363,8 +368,8 @@ public:
             //optional:
             //just if you want to look what the algorithm is doing
             //system("cls");
-            //print();
-            cout << "#";
+            print();
+            //cout << "#";
             cout << endl; //somehow does not work without this line
             //delay(100);
             //end of optional
@@ -381,7 +386,7 @@ public:
      */
     void print() {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, 7);
+        SetConsoleTextAttribute(hConsole, 7); //this could be beautified
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
                 if (arr[k][i].getContent() == 'P') {
@@ -411,6 +416,7 @@ public:
                     SetConsoleTextAttribute(hConsole, 7);
                     cout << arr[k][i].getContent();
                 }
+                //SetConsoleTextAttribute(hConsole, 7); //only here
             }
             cout << endl;
         }
