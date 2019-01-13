@@ -46,6 +46,8 @@ namespace calculate {
                 return;
             } else {
                 for (int i = 1, k = start; i < AmountOfPrimeNumbersToCalculate; k++) {
+                    //make this a own function -> checkPrime()
+                    //this will cost time, since it has to copy on stack, but make a global check function available
                     Prime = true;
                     divide = 2;
                     while (Prime == true && divide < k) {
@@ -58,6 +60,7 @@ namespace calculate {
                         KnownPrimeNumbers[i] = k;
                         i++;
                     }
+                    //end of function
                 }
             }
         }
