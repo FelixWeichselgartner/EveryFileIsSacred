@@ -4,12 +4,6 @@ from math import atan as arctan
 
 def arctan2(x, y):
     #values = ]-pi;pi]
-    #print(f'x was {x}')
-    if x==-0.0:
-        x=0.0
-    #print(f'y was {y}')
-    if y==-0.0:
-        y=0.0
     #here dont mess up 0 and -0
     if x>0:
         return arctan(y/x)
@@ -22,7 +16,7 @@ def arctan2(x, y):
             return arctan(y/x)-pi
     if x==0:
         if y==0:
-            return None
+            return 0 #or None actually it has no phase here but 0 is fine
         if y>0:
             print(f'x = {x}, y = {y}')
             return pi/2

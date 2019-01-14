@@ -8,6 +8,9 @@ from numpy import fft as npfft
 to do list:
     phase does not return right results yet -> fault: python returns different values for angle(4, 0) and angle(4, -0)
     modulo 2pi for angles to get values in ]-pi;pi]
+
+    abs is actually sqrt(re^2 + im^2)
+        own implementation
 """
 
 def DC_TEST():
@@ -15,7 +18,7 @@ def DC_TEST():
 
     #signal x
     x = []
-    #making signal a sine wave 
+    #making a dc signal with 5V here
     amount = 8
     n = 0
     inkrement = 2*pi/amount
@@ -32,7 +35,7 @@ def DC_TEST():
     #if my ouput is the same it highly possible that is correct
     NUMPYFFT = around(npfft.fft(x), decimals=6)
     print(f'NumpyFFT = {NUMPYFFT}\n')
-    print(f'Amplitude:\n{around(abs(NUMPYFFT), decimals=6)}')
+    print(f'Amplitude = {around(abs(NUMPYFFT), decimals=6)}')
     print(f'Phase = {around(npangle(NUMPYFFT), decimals=6)}\n\n')
 
     #Diskrete-Fourier-Transformation
@@ -48,11 +51,11 @@ def DC_TEST():
     for i in range(len(X)):
         #print(f'X[i] = {X[i]}')
         temp1 = abs(X[i])
-        A[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        A[i] = temp1
         #temp2 = around(arctan2(X[i].imag, X[i].real), decimals=6)
         #temp2 = around(npangle(X[i]), decimals=6)
         temp2 = angle(X[i])
-        p[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        p[i] = temp2
         #print(p[i])
     
     print(f'Amplitude: A = {A}')
@@ -103,10 +106,12 @@ def AC_TEST():
     print('Octave(Matlab)-Output:')
     print('fft = 0.00000 +  0.00000i   -0.00000 - 20.00000i    0.00000 -  0.00000i    0.00000 -  0.00000i    0.00000 +  0.00000i    0.00000 +  0.00000i    0.00000 +  0.00000i   -0.00000 + 20.00000i\n')
     print('fft(Amplitude) = 1.6823e-16   2.0000e+01   1.4662e-15   1.7764e-15   1.0564e-15   1.7764e-15   1.4662e-15   2.0000e+01')
-    print('fft(Phase)     = 0.00000     -1.57080     -1.13998     -1.56195      0.00000      1.56195      1.13998      1.57080\n\n')
+    print('fft(Phase)     = 0.00000     -1.57080     -1.13998     -1.56195      0.00000      1.56195      1.13998      1.57080\nthe phase is actually false\n\n')
     #you can also try numpy fft.fft()
-    #print(f'Numpy-fft:\n{abs(npfft.fft(x))}')
-    #print(f'phase with numpy = {around(angle(npfft.fft(x)), decimals=6)}')
+    NUMPYFFT = around(npfft.fft(x), decimals=6)
+    print(f'NumpyFFT = {NUMPYFFT}\n')
+    print(f'Amplitude = {around(abs(NUMPYFFT), decimals=6)}')
+    print(f'Phase = {around(npangle(NUMPYFFT), decimals=6)}\n\n')
 
     #Diskrete-Fourier-Transformation
     X = around(dft(x), decimals=6)
@@ -142,11 +147,11 @@ def AC_TEST():
     i = 0
     for i in range(len(X2)):
         temp1 = abs(X2[i])
-        A2[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        A2[i] = temp1
         #temp2 = arctan2(X2[i].imag, X2[i].real)
         #temp2 = around(npangle(X2[i]), decimals=6)
         temp2 = angle(X[i])
-        p2[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        p2[i] = temp2
     
     print(f'Amplitude: A2 = {A2}')
     print(f'Phase: p2 = {p2}\n\n\n')
