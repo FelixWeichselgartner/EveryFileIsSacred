@@ -13,16 +13,11 @@
 **************************************************************
 */
 
-/*
-to do:
-    in function print: line 373: program does not work without the cout << endl;
-*/
-
 //for debugging with vs_code:
-//"program": "${workspaceFolder}/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
+//"program": "${workspaceFolder}/a star pathfinding algorithm/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
 
 //compile command for gcc:
-//g++ .\a-star-pathfinding-algorithm.cpp -o .\a-star-pathfinding-algorithm.exe
+//g++ .\a-star-pathfinding-algorithm.cpp -o .\a-star-pathfinding-algorithm.exe -g
 
 #include <iostream>
 using namespace std;
@@ -122,9 +117,6 @@ private:
     //those are the end coordinates
     int end_x, end_y;
 
-    //this is the current position of the square calculated around
-    int current_pos_x, current_pos_y;
-
     //counts how much runs through the loop were needed
     int count;
 
@@ -139,7 +131,7 @@ public:
      * @retval None
      */
     void setStartValue(int startx, int starty) {
-        start_x = current_pos_x = startx; start_y = current_pos_y = starty; 
+        start_x = startx; start_y = starty; 
         arr[start_x][start_y].setParent(startx, starty);
         arr[start_x][start_y].setParentCount(0);
         arr[start_x][start_y].setContent('S'); 
@@ -154,11 +146,7 @@ public:
      * @retval None
      */
     void setEndValue(int endx, int endy) { end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E'); }
-    void setCurrentX(int setx) { current_pos_x = setx; }
-    void setCurrentY(int sety) { current_pos_y = sety; }
     void setWall(int setx, int sety) { arr[setx][sety].setContent('#'); arr[setx][sety].setClosed(true); }
-    int getCurrentX() { return current_pos_x; }
-    int getCurrentY() { return current_pos_y; }
     int getCount() { return count; }
 
 	/**
@@ -265,9 +253,7 @@ public:
         //int r l u p -- F cost of the richt left up or down field
         int right = false, left = false, up = false, down = false;
         bool flag = false;
-        int vsmall;
         int r = -1, l = -1, u = -1, d = -1;
-        int px, py;
 
         //checking for possible options
         right = possible(newX, newY, newX + 1, newY);
@@ -313,7 +299,11 @@ public:
                 if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
                     temp = arr[k][i].getF();
                     arr[k][i].setRun(true);
-                    if (temp  < fcost) {
+					if (!flag) {
+						flag = false;
+						fcost = temp;
+					}
+                    if (temp < fcost) {
                         fcost = temp;
                     }
                 }
@@ -355,7 +345,11 @@ public:
         if (count == 1) {
             finished = surrounding(start_x, start_y);
             arr[start_x][start_y].setClosed(true);
+
+            //print to console
+            cout << "start of the pathfinding" << endl;
             print();
+            flush(cout);
             if (finished) {
                 return true;
             }
@@ -367,15 +361,16 @@ public:
 
             //optional:
             //just if you want to look what the algorithm is doing
+
             //system("cls");
-            print();
-            //cout << "#";
-            cout << endl; //somehow does not work without this line
+            //print();
+
+            //cout << endl;
+
             //delay(100);
             //end of optional
 
         } while (!finished);
-        print();
         return true;
     }
 
@@ -386,41 +381,35 @@ public:
      */
     void print() {
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, 7); //this could be beautified
+        SetConsoleTextAttribute(hConsole, 7);
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
                 if (arr[k][i].getContent() == 'P') {
                     SetConsoleTextAttribute(hConsole, 9);
                     cout << "P";
-                    SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getContent() == 'S') {
                     SetConsoleTextAttribute(hConsole, 6);
                     cout << "S";
-                    SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getContent() == 'E') {
                     SetConsoleTextAttribute(hConsole, 6);
                     cout << "E";
-                    SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getContent() == '#') {
                     SetConsoleTextAttribute(hConsole, 7);
                     cout << "#";
                 } else if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
                     SetConsoleTextAttribute(hConsole, 10);
                     cout << "O";
-                    SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getClosed() && arr[k][i].getContent() != '#') {
                     SetConsoleTextAttribute(hConsole, 4);
                     cout << "C";
-                    SetConsoleTextAttribute(hConsole, 7);
                 } else if (arr[k][i].getContent() == EMPTY) {
                     SetConsoleTextAttribute(hConsole, 7);
                     cout << arr[k][i].getContent();
                 }
-                //SetConsoleTextAttribute(hConsole, 7); //only here
+                SetConsoleTextAttribute(hConsole, 7);
             }
             cout << endl;
         }
-        SetConsoleTextAttribute(hConsole, 7);
     }
 
     /**
@@ -437,8 +426,6 @@ public:
             xp = tempx; yp = tempy;
             arr[xp][yp].setContent('P');
         } while(xp != start_x && yp != start_y);
-        //arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
-		print();
     }
 
     /**
@@ -479,25 +466,16 @@ int main() {
 	time_t start = time(0);
     class pathfinding path;
     path.readMazeFromFile();
-
-    /*
-    path.setStartValue(0, 3);
-    path.setEndValue(7, 7);
-    for (int i = 0; i < 8; i++) {
-        path.setWall(i + 1, 4);
-    }
-    */
    
     if (!path.find()) {
         system("cls");
         cout << "pathfinding was not succesfull!" << endl;
     }
     path.printPathToEnd();
-    
-    
     //system("cls");
     cout << "pathfinding was succesfull" << endl;
     path.print();
+
     cout << "The amount of iterations needed: " << path.getCount() << endl;
 	cout << "The time needed: " << (double)difftime(time(0), start) << " seconds" << endl;
 

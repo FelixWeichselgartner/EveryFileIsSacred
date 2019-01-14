@@ -1,9 +1,31 @@
 from math import pi
 from cmath import exp
+from math import atan as arctan
+
+def arctan2(x, y):
+    #values = ]-pi;pi]
+    #here dont mess up 0 and -0
+    if x>0:
+        return arctan(y/x)
+    if x<0:
+        if y>0:
+            return arctan(y/x)+pi
+        if y==0:
+            return pi
+        if y<0:
+            return arctan(y/x)-pi
+    if x==0:
+        if y==0:
+            return 0 #or None actually it has no phase here but 0 is fine
+        if y>0:
+            print(f'x = {x}, y = {y}')
+            return pi/2
+        if y<0:
+            return -pi/2
 
 def angle(X):
-    #return arctan2(X[i].imag, X[i].real)
-    pass
+    #print(f'X = {X}')
+    return arctan2(X.real, X.imag)
     
 def dft(x):
     N = len(x)
