@@ -1,6 +1,6 @@
-from dft import dft, fft
+from dft import dft, fft, angle
 from math import sin, pi, pow
-from numpy import arctan2, angle, around
+from numpy import arctan2, around
 from numpy import angle as npangle
 from numpy import fft as npfft
 
@@ -33,7 +33,7 @@ def DC_TEST():
     NUMPYFFT = around(npfft.fft(x), decimals=6)
     print(f'NumpyFFT = {NUMPYFFT}\n')
     print(f'Amplitude:\n{around(abs(NUMPYFFT), decimals=6)}')
-    print(f'Phase = {around(angle(NUMPYFFT), decimals=6)}\n\n')
+    print(f'Phase = {around(npangle(NUMPYFFT), decimals=6)}\n\n')
 
     #Diskrete-Fourier-Transformation
     X = around(dft(x), decimals=6)
@@ -46,10 +46,12 @@ def DC_TEST():
     p = [None] * N
     i = 0
     for i in range(len(X)):
+        #print(f'X[i] = {X[i]}')
         temp1 = abs(X[i])
         A[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
         #temp2 = around(arctan2(X[i].imag, X[i].real), decimals=6)
-        temp2 = around(npangle(X[i]), decimals=6)
+        #temp2 = around(npangle(X[i]), decimals=6)
+        temp2 = angle(X[i])
         p[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
         #print(p[i])
     
@@ -70,7 +72,8 @@ def DC_TEST():
         temp1 = abs(X2[i])
         A2[i] = temp1
         #temp2 = around(arctan2(X2[i].imag, X2[i].real), decimals=6)
-        temp2 = around(npangle(X2[i]), decimals=6)
+        #temp2 = around(npangle(X2[i]), decimals=6)
+        temp2 = angle(X[i])
         p2[i] = temp2
     print(f'Amplitude: A2 = {A2}')
     print(f'Phase: p2 = {p2}\n\n\n')
@@ -119,7 +122,8 @@ def AC_TEST():
         temp1 = abs(X[i])
         A[i] = temp1
         #temp2 = arctan2(X[i].imag, X[i].real)
-        temp2 = around(npangle(X[i]), decimals=6)
+        #temp2 = around(npangle(X[i]), decimals=6)
+        temp2 = angle(X[i])
         p[i] = temp2
         #print(p[i])
     
@@ -140,7 +144,8 @@ def AC_TEST():
         temp1 = abs(X2[i])
         A2[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
         #temp2 = arctan2(X2[i].imag, X2[i].real)
-        temp2 = around(npangle(X2[i]), decimals=6)
+        #temp2 = around(npangle(X2[i]), decimals=6)
+        temp2 = angle(X[i])
         p2[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
     
     print(f'Amplitude: A2 = {A2}')
