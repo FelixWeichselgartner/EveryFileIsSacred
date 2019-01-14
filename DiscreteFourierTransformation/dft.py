@@ -4,7 +4,6 @@ from math import atan as arctan
 
 def arctan2(x, y):
     #values = ]-pi;pi]
-    #here dont mess up 0 and -0
     if x>0:
         return arctan(y/x)
     if x<0:
