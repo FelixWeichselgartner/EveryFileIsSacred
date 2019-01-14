@@ -364,13 +364,25 @@ public:
 
             //system("cls");
             //print();
+<<<<<<< HEAD
 
             //cout << endl;
+=======
+            //cout << "#";
+
+            flush(cout); //this is essential if you want to print
+            //cout << endl; //somehow does not work without this line -- but works with fflush(cout)
+>>>>>>> 97b40c161ca0d192de3f0d713845444454eb9475
 
             //delay(100);
             //end of optional
 
         } while (!finished);
+<<<<<<< HEAD
+=======
+        //finished calculation before path from end to start is written to array
+        //print();
+>>>>>>> 97b40c161ca0d192de3f0d713845444454eb9475
         return true;
     }
 
@@ -426,6 +438,11 @@ public:
             xp = tempx; yp = tempy;
             arr[xp][yp].setContent('P');
         } while(xp != start_x && yp != start_y);
+<<<<<<< HEAD
+=======
+        //arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
+		//print();
+>>>>>>> 97b40c161ca0d192de3f0d713845444454eb9475
     }
 
     /**
@@ -474,6 +491,7 @@ int main() {
     path.printPathToEnd();
     //system("cls");
     cout << "pathfinding was succesfull" << endl;
+    flush(cout);
     path.print();
 
     cout << "The amount of iterations needed: " << path.getCount() << endl;
