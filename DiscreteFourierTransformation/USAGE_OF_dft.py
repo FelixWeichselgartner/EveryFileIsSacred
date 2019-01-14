@@ -7,6 +7,7 @@ from numpy import fft as npfft
 """
 to do list:
     phase does not return right results yet
+    modulo 2pi for angles to get values in ]-pi;pi]
 """
 
 def DC_TEST():
@@ -45,8 +46,8 @@ def DC_TEST():
     for i in range(len(X)):
         temp1 = abs(X[i])
         A[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
-        temp2 = around(arctan2(X[i].imag, X[i].real), decimals=6)
-        #temp2 = npangle(X[i])
+        #temp2 = around(arctan2(X[i].imag, X[i].real), decimals=6)
+        temp2 = around(npangle(X[i]), decimals=6)
         p[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
         #print(p[i])
     
@@ -66,8 +67,8 @@ def DC_TEST():
     for i in range(len(X2)):
         temp1 = abs(X2[i])
         A2[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
-        temp2 = around(arctan2(X2[i].imag, X2[i].real), decimals=6)
-        #temp2 = npangle(X2[i])
+        #temp2 = around(arctan2(X2[i].imag, X2[i].real), decimals=6)
+        temp2 = around(npangle(X2[i]), decimals=6)
         p2[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
     
     print(f'Amplitude: A2 = {A2}')

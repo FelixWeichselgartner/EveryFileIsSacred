@@ -355,7 +355,11 @@ public:
         if (count == 1) {
             finished = surrounding(start_x, start_y);
             arr[start_x][start_y].setClosed(true);
+
+            //print to console
+            cout << "start of the pathfinding" << endl;
             print();
+            flush(cout);
             if (finished) {
                 return true;
             }
@@ -367,15 +371,20 @@ public:
 
             //optional:
             //just if you want to look what the algorithm is doing
+
             //system("cls");
-            print();
+            //print();
             //cout << "#";
-            cout << endl; //somehow does not work without this line
+
+            flush(cout); //this is essential if you want to print
+            //cout << endl; //somehow does not work without this line -- but works with fflush(cout)
+
             //delay(100);
             //end of optional
 
         } while (!finished);
-        print();
+        //finished calculation before path from end to start is written to array
+        //print();
         return true;
     }
 
@@ -438,7 +447,7 @@ public:
             arr[xp][yp].setContent('P');
         } while(xp != start_x && yp != start_y);
         //arr[arr[xp][yp].getParentX()][arr[xp][yp].getParentY()].setContent('P');
-		print();
+		//print();
     }
 
     /**
@@ -497,6 +506,7 @@ int main() {
     
     //system("cls");
     cout << "pathfinding was succesfull" << endl;
+    flush(cout);
     path.print();
     cout << "The amount of iterations needed: " << path.getCount() << endl;
 	cout << "The time needed: " << (double)difftime(time(0), start) << " seconds" << endl;
