@@ -6,7 +6,7 @@ from numpy import fft as npfft
 
 """
 to do list:
-    phase does not return right results yet
+    phase does not return right results yet -> fault: python returns different values for angle(4, 0) and angle(4, -0)
     modulo 2pi for angles to get values in ]-pi;pi]
 """
 
@@ -30,8 +30,10 @@ def DC_TEST():
     print(f'signal: x = {x}\n\n')
 
     #if my ouput is the same it highly possible that is correct
-    print(f'Numpy-fft:\n{around(abs(npfft.fft(x)), decimals=6)}')
-    print(f'phase with numpy = {around(angle(npfft.fft(x)), decimals=6)}\n\n')
+    NUMPYFFT = around(npfft.fft(x), decimals=6)
+    print(f'NumpyFFT = {NUMPYFFT}\n')
+    print(f'Amplitude:\n{around(abs(NUMPYFFT), decimals=6)}')
+    print(f'Phase = {around(angle(NUMPYFFT), decimals=6)}\n\n')
 
     #Diskrete-Fourier-Transformation
     X = around(dft(x), decimals=6)
@@ -66,11 +68,10 @@ def DC_TEST():
     i = 0
     for i in range(len(X2)):
         temp1 = abs(X2[i])
-        A2[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        A2[i] = temp1
         #temp2 = around(arctan2(X2[i].imag, X2[i].real), decimals=6)
         temp2 = around(npangle(X2[i]), decimals=6)
-        p2[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
-    
+        p2[i] = temp2
     print(f'Amplitude: A2 = {A2}')
     print(f'Phase: p2 = {p2}\n\n\n')
 
@@ -116,10 +117,10 @@ def AC_TEST():
     i = 0
     for i in range(len(X)):
         temp1 = abs(X[i])
-        A[i] = temp1 #if temp1 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        A[i] = temp1
         #temp2 = arctan2(X[i].imag, X[i].real)
         temp2 = around(npangle(X[i]), decimals=6)
-        p[i] = temp2 #if temp2 > pow(10, -13) else 0 #comment this out later -> just better visualization
+        p[i] = temp2
         #print(p[i])
     
     print(f'Amplitude: A = {A}')
