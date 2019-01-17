@@ -121,12 +121,18 @@ class Complex {
         //dividing objects
         Complex operator / (Complex const &obj) { 
             Complex res;
+            /*
             if (obj.vreal == 0 && obj.vimag == 0) {
                 res.vreal = 0; res.vimag = 0;
             }
             res.vreal = (vreal * obj.vreal + vimag * obj.vimag)/(obj.vreal * obj.vreal + obj.vimag * obj.vimag);
             res.vimag = (obj.vimag * vreal - vimag * obj.vreal)/(obj.vreal * obj.vreal + obj.vimag * obj.vimag);
             res.calculate(); 
+            */
+            //can easier be calculated with Amplitude and phase
+            res.a = a/obj.a;
+            res.phi = phi - obj.phi;
+            calculate2();
             return res; 
         }
 };
