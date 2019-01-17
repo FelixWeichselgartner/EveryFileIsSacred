@@ -1,10 +1,25 @@
+"""
+**************************************************************
+*  Copyright (c) 2019 Felix Weichselgartner
+*  all rights reserved
+**************************************************************
+*  Date of creating this file: 12.12.2019
+*  Last changes: 17.01.2019
+*  creator: Felix Weichselgartner
+*  purpose: practice for exam in 
+            Electrical Metrology and Instrumentation
+            and usage for project mp3-music-visualization
+**************************************************************
+*  Implementation of DFT and FFT
+**************************************************************
+"""
+
 from math import pi
 from cmath import exp
 from math import atan as arctan
 
 def arctan2(x, y):
     #values = ]-pi;pi]
-    #here dont mess up 0 and -0
     if x>0:
         return arctan(y/x)
     if x<0:
@@ -37,8 +52,14 @@ def dft(x):
         temp = 0
         for k in range(N):
             temp = x[k]*exp(wExponent*k*l) + temp
-        X[l] = temp
+        X[l] = temp/N
     return X
+
+def idft(x):
+    pass
+
+def hamming(x):
+    pass
 
 def fft(x):
     N = len(x)
