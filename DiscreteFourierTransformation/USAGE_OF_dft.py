@@ -1,8 +1,9 @@
 from dft import dft, fft, angle
 from math import sin, pi, pow
-from numpy import arctan2, around
+from numpy import arctan2, around, max
 from numpy import angle as npangle
 from numpy import fft as npfft
+import plot as plt
 
 """
 to do list:
@@ -81,6 +82,8 @@ def DC_TEST():
     print(f'Amplitude: A2 = {A2}')
     print(f'Phase: p2 = {p2}\n\n\n')
 
+    plt.plot(x, X, max(x))
+
 def AC_TEST():
     print('AC TEST:\n\n')   
 
@@ -156,6 +159,56 @@ def AC_TEST():
     print(f'Amplitude: A2 = {A2}')
     print(f'Phase: p2 = {p2}\n\n\n')
 
+    plt.plot(x, X, max(x))
+
+def AC_TEST_with_zero_padding():
+    print('AC TEST with zero padding:\n\n')   
+
+    #signal x
+    x = []
+
+    #making signal a sine wave 
+    amount = 8
+    n = 0
+    inkrement = 2*pi/amount
+    i = 0
+    for i in range(amount):
+        x.append(sin(n)*5)
+        n = n + inkrement
+
+    for i in range (amount*4):
+        x.append(0)
+
+    N = len(x)
+
+    #original signal
+    print(f'signal: x = {x}\n\n')
+
+    #Diskrete-Fourier-Transformation
+    X = around(dft(x), decimals=6)
+
+    print('Diskrete-Fourier-Transformation:')
+    print(f'X = {X}\n')
+
+    #amplitude and phase
+    A = [None] * N
+    p = [None] * N
+    i = 0
+    for i in range(len(X)):
+        temp1 = abs(X[i])
+        A[i] = temp1
+        temp2 = angle(X[i])
+        p[i] = temp2
+    
+    #dividing by 1/N is not right anymore because of zero padding
+    X = X * N/8
+
+    print(f'Amplitude: A = {A}')
+    print(f'Phase: p = {p}\n\n')
+
+    plt.plot(x, X, max(x))
+
 if __name__ == "__main__":
     DC_TEST()
     AC_TEST()
+    AC_TEST_with_zero_padding()
