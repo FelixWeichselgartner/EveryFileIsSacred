@@ -4,7 +4,7 @@
 //integer
 
 int generateiArray(int **ptr, int size) {
-    *ptr= malloc(size * sizeof(int));
+    *ptr = malloc(size * sizeof(int));
 	if (ptr == NULL) {
 		printf("No memory could be allocated\n");
 		return 0;
@@ -32,7 +32,7 @@ void printiArray(int *ptr, int size) {
 //float
 
 int generatefArray(float **ptr, int size) {
-    *ptr= malloc(size * sizeof(float));
+    *ptr = malloc(size * sizeof(float));
 	if (ptr == NULL) {
 		printf("No memory could be allocated\n");
 		return 0;
@@ -60,7 +60,7 @@ void printfArray(float *ptr, int size) {
 //double
 
 int generatedArray(double **ptr, int size) {
-    *ptr= malloc(size * sizeof(double));
+    *ptr = malloc(size * sizeof(double));
 	if (ptr == NULL) {
 		printf("No memory could be allocated\n");
 		return 0;
@@ -88,7 +88,7 @@ void printdArray(double *ptr, int size) {
 //char
 
 int generatecArray(char **ptr, int size) {
-    *ptr= malloc(size * sizeof(char));
+    *ptr = malloc(size * sizeof(char));
 	if (ptr == NULL) {
 		printf("No memory could be allocated\n");
 		return 0;
@@ -116,7 +116,7 @@ void printcArray(char *ptr, int size) {
 //string
 
 int generatesArray(char **ptr, int size) {
-    *ptr= (char *)malloc(size * 32 * sizeof(char));
+    *ptr = (char *)malloc(size * 32 * sizeof(char));
 	if (ptr == NULL) {
 		printf("No memory could be allocated\n");
 		return 0;
