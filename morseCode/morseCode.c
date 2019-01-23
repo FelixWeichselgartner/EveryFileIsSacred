@@ -45,6 +45,12 @@ char QuestionMark[] = {s, s, l, l, s, s, end};
 char Period[] = {s, l, s, l, s, l, end};
 char Comma[] = {l, l, s, s, l, l, end};
 
+//7 units of time nothing between two words
+char Space[] = {'P', end};
+
+//3 units of time nothing between letters
+char Pause[] = {'p', end};
+
 char Equals[] = {l, s, s, s, l, end};
 char Plus[] = {s, l, s, l, s, end};
 
@@ -139,7 +145,7 @@ char ** stringToMorse(char *string) {
             case 225: *(morseCode + i) = sharpS; break;
             */
 
-            case ' ': break;
+            case ' ': *(morseCode + i) = Space; break;
             case '?': *(morseCode + i) = QuestionMark; break;
             case '.': *(morseCode + i) = Period; break;
             case ',': *(morseCode + i) = Comma; break;

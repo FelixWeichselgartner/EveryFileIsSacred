@@ -6,7 +6,7 @@
 //gcc .\USAGE_OF_morseCode.c .\morseCode.c -o .\USAGE_OF_morseCode.exe
 
 void main() {
-    char *name = "Felix\0";
+    char *name = "Felix on Github\0";
 	printf("the original string is %s\n", name);
     char **morseName = stringToMorse(name);
     printf("returned address is: %p\n", morseName);
