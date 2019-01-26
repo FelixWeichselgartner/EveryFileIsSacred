@@ -14,10 +14,10 @@
 */
 
 //for debugging with vs_code:
-//"program": "${workspaceFolder}/a star pathfinding algorithm/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
+//"program": "${workspaceFolder}/AStarPathfindingAlgorithm/${fileBasenameNoExtension}.exe",  ---for debugging with vscode
 
 //compile command for gcc:
-//g++ .\a-star-pathfinding-algorithm.cpp -o .\a-star-pathfinding-algorithm.exe -g
+//g++ .\AStarPathfindingAlgorithm.cpp -o .\AStarPathfindingAlgorithm.exe -g
 
 #include <iostream>
 using namespace std;
