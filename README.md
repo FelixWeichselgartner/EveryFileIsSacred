@@ -43,6 +43,7 @@ Chess game in C that is checking for all moves
 ## ChessC++
 
 An implementation of my previous Chess game in C
+
 Classes for every Chess piece, class for the actual game, class for the board
 
 ## What I Learned
@@ -66,6 +67,7 @@ My first C++ program. Implementation of Complex numers in C++
 ## DiscreteFourierTransformation
 
 implementation of the DFT (Discrete Fourier Transformation) and the FFT (Fast Fourier Transformation)
+
 Proof of Concept for a music visualisation
 
 ## What I Learned
@@ -77,6 +79,7 @@ Proof of Concept for a music visualisation
 ## EloRatingAlgorithm
 
 implementation of the Elo rating algorithm used in most games and pvp applications
+
 looking forward to use this on my website
 
 ## What I Learned
@@ -88,9 +91,13 @@ looking forward to use this on my website
 ## ExchangeStringInCSV
 
 A program I wrote for an internship
+
 I had to exchange room numbers in an excel sheet
+
 Therefore I first created a translation list
+
 After starting I realised that I didn't want to change this all by hand since there were like 500 room numbers
+
 
 ## What I Learned
 
@@ -131,7 +138,9 @@ using c functions in python with ctypes
 ## TicTacToeGUIC++
 
 a GUI for a previous written TicTacToe script in python
+
 this implementation is in C++
+
 for the GUI I used SFML
 
 ## What I Learned
@@ -143,8 +152,11 @@ for the GUI I used SFML
 ## fweichsel_header
 
 my own c headers
+
     dynamical memory allocation
+
     linked lists
+    
     some basic functions (like bubblesort)
 
 ## What I Learned
