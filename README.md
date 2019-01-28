@@ -25,8 +25,8 @@ It reads in a maze from a txt file and calculates the shortest path to the end
 
 ## What I Learned
 
-* MouseListener in Java
-* Usage of CheckStyle
+* OOP in C++
+* function priciple of a star algorithm
 
 *****************************************************************************
 
