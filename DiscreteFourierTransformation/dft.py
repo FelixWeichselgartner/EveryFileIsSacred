@@ -83,10 +83,10 @@ def fft(x):
     l = 0
     wExponent = 1j*2*pi/N*(-1)
     for l in range(max):
-        X[l] = XS[l] + exp(wExponent*l)*XSS[l]
+        X[l] = (XS[l] + exp(wExponent*l)*XSS[l])/2
 
     l = 0
     for l in range(max):
-        X[l + max] = XS[l] - exp(wExponent*l)*XSS[l]
+        X[l + max] = (XS[l] - exp(wExponent*l)*XSS[l])/2
     
     return X
