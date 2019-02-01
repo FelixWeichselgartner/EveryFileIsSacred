@@ -50,14 +50,10 @@ def DC_TEST():
     p = [None] * N
     i = 0
     for i in range(len(X)):
-        #print(f'X[i] = {X[i]}')
         temp1 = abs(X[i])
         A[i] = temp1
-        #temp2 = around(arctan2(X[i].imag, X[i].real), decimals=6)
-        #temp2 = around(npangle(X[i]), decimals=6)
         temp2 = angle(X[i])
         p[i] = temp2
-        #print(p[i])
     
     print(f'Amplitude: A = {A}')
     print(f'Phase: p = {p}\n\n')
@@ -75,8 +71,6 @@ def DC_TEST():
     for i in range(len(X2)):
         temp1 = abs(X2[i])
         A2[i] = temp1
-        #temp2 = around(arctan2(X2[i].imag, X2[i].real), decimals=6)
-        #temp2 = around(npangle(X2[i]), decimals=6)
         temp2 = angle(X[i])
         p2[i] = temp2
     print(f'Amplitude: A2 = {A2}')
@@ -129,8 +123,6 @@ def AC_TEST():
     for i in range(len(X)):
         temp1 = abs(X[i])
         A[i] = temp1
-        #temp2 = arctan2(X[i].imag, X[i].real)
-        #temp2 = around(npangle(X[i]), decimals=6)
         temp2 = angle(X[i])
         p[i] = temp2
         #print(p[i])
@@ -151,8 +143,6 @@ def AC_TEST():
     for i in range(len(X2)):
         temp1 = abs(X2[i])
         A2[i] = temp1
-        #temp2 = arctan2(X2[i].imag, X2[i].real)
-        #temp2 = around(npangle(X2[i]), decimals=6)
         temp2 = angle(X[i])
         p2[i] = temp2
     
