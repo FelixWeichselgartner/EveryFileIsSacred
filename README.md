@@ -1,11 +1,13 @@
 *****************************************************************************
-Copyright (c) 2019 Felix Weichselgartner
+# Copyright (c) 2019 Felix Weichselgartner
 *****************************************************************************
 
 All files and all lines of code are owned by the Felix Weichselgartner.
+
 All rights are reserved.
 
 But since I also like to use open-source software:
+
 You can use the all code in this repository for non-commercial purposes!!!
 
 *****************************************************************************
@@ -21,12 +23,13 @@ If you want to use my code for commercial purposes please contact:
 ## A Star Pathfinding Algorithm
 
 An A Star Pathfinding Algorithm implementation in C++
+
 It reads in a maze from a txt file and calculates the shortest path to the end
 
 ## What I Learned
 
-* MouseListener in Java
-* Usage of CheckStyle
+* OOP in C++
+* function priciple of a star algorithm
 
 *****************************************************************************
 
