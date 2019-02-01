@@ -1,6 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def singlePlot(function):
+    maximum = max(function)
+    
+    plt.figure(1)
+
+    s = plt.subplot(211)
+    s.set_ylim([-maximum, maximum])
+    s.set_xlabel('time [s]')
+    s.set_ylabel('signal')
+    x = np.arange(len(function))
+    plt.plot(x, function)
+
+    plt.show()
+    plt.clf() 
+
 def plot(signal, fourier, maximum):
     """plots the original signal along with the frequencies of that signal
     

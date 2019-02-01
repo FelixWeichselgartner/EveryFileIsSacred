@@ -92,7 +92,7 @@ class pathfinding {
         void setClosed(bool b) {closed = b;}
         void setParent(int a, int b) {parent_x = a; parent_y = b;}
         void setParentCount(int a) {parent_count = a;}
-        void setRun(int r) { run = r; }
+        void setRun(int r) {run = r;}
         int getG() {return G;}
         int getH() {return H;}
         int getF() {return F;}
@@ -104,7 +104,7 @@ class pathfinding {
         int getParentX() {return parent_x;}
         int getParentY() {return parent_y;}
         int getParentCount() {return parent_count;}
-        bool getRun() { return run; }
+        bool getRun() {return run;}
     };
 
 private:
@@ -121,7 +121,7 @@ private:
     int count;
 
 public:
-	pathfinding() { count = 1; }
+	pathfinding() {count = 1;}
 
     /**
      * @brief  sets the start value for the pathfinding
@@ -145,9 +145,9 @@ public:
      * @param  endy: y value of end point
      * @retval None
      */
-    void setEndValue(int endx, int endy) { end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E'); }
-    void setWall(int setx, int sety) { arr[setx][sety].setContent('#'); arr[setx][sety].setClosed(true); }
-    int getCount() { return count; }
+    void setEndValue(int endx, int endy) {end_x = endx; end_y = endy; arr[end_x][end_y].setContent('E');}
+    void setWall(int setx, int sety) {arr[setx][sety].setContent('#'); arr[setx][sety].setClosed(true);}
+    int getCount() {return count;}
 
 	/**
 	 * @brief  calculates the G cost
@@ -161,8 +161,8 @@ public:
         int xp = xx, yp = yy;
         int amount = 1;
         do {
-            xp = arr[xp][yp].getParentX(); //returns bs for 0 4 so next cant work
-            yp = arr[xp][yp].getParentY(); //segmentation fault bs 4
+            xp = arr[xp][yp].getParentX();
+            yp = arr[xp][yp].getParentY();
             amount++;
         } while(xp != start_x && yp != start_y);
 		return amount + 1;
@@ -216,7 +216,7 @@ public:
 	 * @retval None
 	 */
 	void Parent(int newX, int newY, int px, int py) {
-		arr[newX][newY].setParent(px, py); //changed px and xx && py and yy
+		arr[newX][newY].setParent(px, py);
 	}
 
     /**
@@ -227,7 +227,7 @@ public:
      * @retval 2 = End; 1 = possible; 0 = not possible
      */
     int possible(int xx, int yy, int newX, int newY) {
-        if (arr[newX][newY].getClosed() == false && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
+        if (!arr[newX][newY].getClosed() && arr[newX][newY].getContent() != '#' && (newX <= x && newX >= 0 && newY <= y && newY >= 0)) { //out of map
             if (arr[newX][newY].getContent() == 'E') {
                 Parent(newX, newY, xx, yy);
                 return 2;
@@ -252,30 +252,39 @@ public:
         //bool right left up down -- right if possible, false if not
         //int r l u p -- F cost of the richt left up or down field
         int right = false, left = false, up = false, down = false;
+        int rightUp = false, leftUp = false, rightDown = false, leftDown = false;
         bool flag = false;
         int r = -1, l = -1, u = -1, d = -1;
+        int ru = -1, lu = -1, rd = -1, ld = -1;
 
         //checking for possible options
         right = possible(newX, newY, newX + 1, newY);
         left = possible(newX, newY, newX - 1, newY);
-        up = possible(newX, newY, newX, newY + 1);
-        down = possible(newX, newY, newX, newY - 1);
+        up = possible(newX, newY, newX, newY - 1);
+        down = possible(newX, newY, newX, newY + 1);
+        /*
+        rightUp = possible(newX, newY, newX + 1, newY - 1);
+        leftUp = possible(newX, newY, newX - 1, newY - 1);
+        rightDown = possible(newX, newY, newX + 1, newY + 1);
+        leftDown = possible(newX, newY, newX - 1, newY + 1);
+        */
 
         //calculating the F cost for every possible direction
-        if (right) {
-            r = calc(newX + 1, newY);
-        }
-        if (left) {
-            l = calc(newX - 1, newY);
-        }
-        if (up) {
-            u = calc(newX, newY + 1);
-        }
-        if (down) {
-            d = calc(newX, newY - 1);
-        }
+        if (right) {r = calc(newX + 1, newY);}
+        if (left) {l = calc(newX - 1, newY);}
+        if (up) {u = calc(newX, newY - 1);}
+        if (down) {d = calc(newX, newY + 1);}
+        /*
+        need new calc function for this ->
+            diagonal cost = sqrt(1^2+1^2)
+            better: normal 10 -> diag 14
+        if (rightUp) {ru = calc(newX + 1, newY - 1);}
+        if (leftUp) {lu = calc(newX - 1, newY - 1);}
+        if (rightDown) {rd = calc(newX + 1, newY + 1);}
+        if (leftDown) {ld = calc(newX - 1, newY + 1);}
+        */
 
-        if (right == 2 || left == 2 || up == 2 || down == 2) {
+        if (right == 2 || left == 2 || up == 2 || down == 2 || rightUp == 2 || leftUp == 2 || rightDown == 2 || leftDown == 2) {
             return true;
         } else {
             return false;
@@ -296,7 +305,7 @@ public:
         //get lowest f cost value
         for (int i = 0; i < y; i++) {
             for (int k = 0; k < x; k++) {
-                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false) {
+                if (arr[k][i].getOpen() && !arr[k][i].getClosed()) {
                     temp = arr[k][i].getF();
                     arr[k][i].setRun(true);
 					if (!flag) {
@@ -313,9 +322,9 @@ public:
         //new field are opened with lower f cost than temp
         //does more than one iteration then
         //calculate surrounding of all open fields with lowest f cost
-        for (int i = 0; i < y; i++) {
+        for (int i = 0; i < y; i++) { //fault in here
             for (int k = 0; k < x; k++) {
-                if (arr[k][i].getOpen() && arr[k][i].getClosed() == false && arr[k][i].getRun()) {
+                if (arr[k][i].getOpen() && !arr[k][i].getClosed() && arr[k][i].getRun()) {
                     arr[k][i].setRun(false);
                     if (arr[k][i].getF() == fcost) {
                         arr[k][i].setClosed(true);
@@ -363,9 +372,10 @@ public:
             //just if you want to look what the algorithm is doing
 
             //system("cls");
-            //print();
+            print();
 
-            //cout << endl;
+            //flush(cout);
+            cout << endl;
 
             //delay(100);
             //end of optional
@@ -480,6 +490,6 @@ int main() {
 
     //program stays open
     cout << endl << "press any button to close the program" << endl;
-    getch();
+    //getch();
     return 0;
 }
