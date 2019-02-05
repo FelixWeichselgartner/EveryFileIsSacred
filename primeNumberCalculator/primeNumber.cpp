@@ -40,7 +40,6 @@ namespace calculate {
 
         void calc() {
             int start = 3;
-            int divide = 0;
             bool Prime = true;
             if (AmountOfPrimeNumbersToCalculate < 1) {
                 return;
@@ -49,13 +48,12 @@ namespace calculate {
                     //make this a own function -> checkPrime()
                     //this will cost time, since it has to copy on stack, but make a global check function available
                     Prime = true;
-                    divide = 2;
 
                     for (int p = 0; p < i; p++) {
+                        Prime = possiblePrimeNumber(k, KnownPrimeNumbers[p]);
                         if (Prime == false) {
                             break;
                         }
-                        Prime = possiblePrimeNumber(k, KnownPrimeNumbers[p]);
                     }
 
                     if (Prime == true) {
