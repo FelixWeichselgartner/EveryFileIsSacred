@@ -50,12 +50,14 @@ namespace calculate {
                     //this will cost time, since it has to copy on stack, but make a global check function available
                     Prime = true;
                     divide = 2;
-                    while (Prime == true && divide < k) {
-                        if (possiblePrimeNumber(k, divide) == false) {
-                            Prime = false;
+
+                    for (int p = 0; p < i; p++) {
+                        if (Prime == false) {
+                            break;
                         }
-                        divide++;
+                        Prime = possiblePrimeNumber(k, KnownPrimeNumbers[p]);
                     }
+
                     if (Prime == true) {
                         KnownPrimeNumbers[i] = k;
                         i++;
