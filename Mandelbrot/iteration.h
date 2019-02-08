@@ -3,7 +3,7 @@
 
 #include <complex.h>
 
-double complex iteration(int, double complex);
+int iteration(int, double complex);
 
 double absSquare(double, double);
 
