@@ -45,6 +45,8 @@ char QuestionMark[] = {s, s, l, l, s, s, end};
 char Period[] = {s, l, s, l, s, l, end};
 char Comma[] = {l, l, s, s, l, l, end};
 
+char SOS[] = {s, s, s, l, l, l, s, s, s, end};
+
 //7 units of time nothing between two words
 char Space[] = {'P', end};
 
