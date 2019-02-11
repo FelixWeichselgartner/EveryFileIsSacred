@@ -8,9 +8,9 @@ def zeroPaddingToNextPOW2N(function):
     n = 1
     while length > pow(2, n):
         n += 1 
-    print(f'n = {n}')
+    #print(f'n = {n}')
     add = pow(2, n) - length
-    print(f'length {length} + add {add} = {length + add} == {pow(2, n)}')
+    #print(f'length {length} + add {add} = {length + add} == {pow(2, n)}')
     function = zeroPadding(function, add)
     return function
     

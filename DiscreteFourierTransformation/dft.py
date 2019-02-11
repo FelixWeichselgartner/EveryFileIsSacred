@@ -33,7 +33,6 @@ def arctan2(x, y):
         if y==0:
             return 0 #or None actually it has no phase here but 0 is fine
         if y>0:
-            #print(f'x = {x}, y = {y}')
             return pi/2
         if y<0:
             return -pi/2
@@ -56,9 +55,6 @@ def dft(x):
     return X
 
 def idft(x):
-    pass
-
-def hamming(x):
     pass
 
 def fft(x):

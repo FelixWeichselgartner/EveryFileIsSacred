@@ -168,6 +168,17 @@ my own c headers
 
 *****************************************************************************
 
+## Mandelbrot
+
+save a Mandelbrot fractal as a BitMap file (bmp)
+
+## What I Learned
+
+* using complex numbers in C
+* function principle of Mandelbrot
+
+*****************************************************************************
+
 ## morseCode
 
 converting strings in the morse code alphabet
