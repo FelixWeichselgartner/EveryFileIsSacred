@@ -67,18 +67,6 @@ My first C++ program. Implementation of Complex numers in C++
 
 *****************************************************************************
 
-## DiscreteFourierTransformation
-
-implementation of the DFT (Discrete Fourier Transformation) and the FFT (Fast Fourier Transformation)
-
-Proof of Concept for a music visualisation
-
-## What I Learned
-
-* Fourier Transformation
-
-*****************************************************************************
-
 ## EloRatingAlgorithm
 
 implementation of the Elo rating algorithm used in most games and pvp applications
@@ -167,6 +155,17 @@ my own c headers
 ## What I Learned
 
 * using headers in C
+
+*****************************************************************************
+
+## Mandelbrot
+
+save a Mandelbrot fractal as a BitMap file (bmp)
+
+## What I Learned
+
+* using complex numbers in C
+* function principle of Mandelbrot
 
 *****************************************************************************
 
