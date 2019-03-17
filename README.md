@@ -136,9 +136,7 @@ for the GUI I used SFML
 
 ## What I Learned
 
-* OOP in C++
-* using SFML lib
-* function principle of drawing rectangles and pictures
+* importing c functions in python
 
 *****************************************************************************
 

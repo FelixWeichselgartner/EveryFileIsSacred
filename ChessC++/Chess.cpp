@@ -59,7 +59,6 @@ bool Chess::input(Board NewBoard, int *z_from, int *z_to, int *s_from, int *s_to
 	Board * newBoard = &NewBoard;
 
 	do {
-		
     	cout << "which figure do you want to move?: ";
     	cin >> S_from >> *z_from;
     	if (S_from == '+' && *z_from == 1)

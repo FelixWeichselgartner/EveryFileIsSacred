@@ -9,14 +9,14 @@ const char WHITE = 'w', BLACK = 'b', NONE = 'n';
 Board::Board() {
     /*
     This is how an initialised board looks like:
-    ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK,
-    PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-    PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN, PAWN,
-    ROOK, KNIGHT, BISHOP, KING, QUEEN, BISHOP, KNIGHT, ROOK};
+    ROOK,   KNIGHT, BISHOP, KING,   QUEEN,  BISHOP, KNIGHT, ROOK,
+    PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,
+    EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
+    EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
+    EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
+    EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
+    PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,
+    ROOK,   KNIGHT, BISHOP, KING,   QUEEN,  BISHOP, KNIGHT, ROOK};
     the top line is black
     the bottom line is white
     */
@@ -28,27 +28,18 @@ Board::Board() {
     board[0][5] = new Bishop(BISHOP, WHITE);
     board[0][6] = new Knight(KNIGHT, WHITE);
     board[0][7] = new Rook(ROOK, WHITE);
-    board[1][0] = new Pawn(PAWN, WHITE);
-    board[1][1] = new Pawn(PAWN, WHITE);
-    board[1][2] = new Pawn(PAWN, WHITE);
-    board[1][3] = new Pawn(PAWN, WHITE);
-    board[1][4] = new Pawn(PAWN, WHITE);
-    board[1][5] = new Pawn(PAWN, WHITE);
-    board[1][6] = new Pawn(PAWN, WHITE);
-    board[1][7] = new Pawn(PAWN, WHITE);
+
+    for (int i = 0; i < 8; i++) {
+        board[1][i] = new Pawn(PAWN, WHITE);
+        board[6][i] = new Pawn(PAWN, WHITE);
+    }
+
     for(int i = 2; i < 6; i++) {
         for(int k = 0; k < fieldsize; k++) {
             board[i][k] = new Piece();
         }
     }
-    board[6][0] = new Pawn(PAWN, BLACK);
-    board[6][1] = new Pawn(PAWN, BLACK);
-    board[6][2] = new Pawn(PAWN, BLACK);
-    board[6][3] = new Pawn(PAWN, BLACK);
-    board[6][4] = new Pawn(PAWN, BLACK);
-    board[6][5] = new Pawn(PAWN, BLACK);
-    board[6][6] = new Pawn(PAWN, BLACK);
-    board[6][7] = new Pawn(PAWN, BLACK);
+    
     board[7][0] = new Rook(ROOK, BLACK);
     board[7][1] = new Knight(KNIGHT, BLACK);
     board[7][2] = new Bishop(BISHOP, BLACK);
@@ -96,43 +87,39 @@ int Board::winner(int z_from, int z_to, int s_from, int s_to) {
     	return -1; //BLACK WON
 	return 0; //NOBDY WON YET
 }
+
 void Board::change_place(char figure, char c, int z, int s) {
 	switch(figure) {
-        case PAWN: {
+        case PAWN: 
 			board[z][s] = new Pawn(PAWN, c);
             break;
-        }
-        case ROOK: {
+        case ROOK: 
 			board[z][s] = new Rook(ROOK, c);
             break;
-        }
-        case KNIGHT: {
+        case KNIGHT: 
 			board[z][s] = new Knight(KNIGHT, c);
             break;
-        }
-        case BISHOP: {
+        case BISHOP: 
 			board[z][s] = new Bishop(BISHOP, c);
             break;
-        }
-        case KING: {
+        case KING: 
 			board[z][s] = new King(KING, c);
             break;
-        }
-        case QUEEN: {
+        case QUEEN: 
 			board[z][s] = new Queen(QUEEN, c);
             break;
-        }
-		case EMPTY: {
+		case EMPTY:
 			board[z][s] = new Piece();
 			break;
-		}
         default: break;
     }
 }
+
 void Board::change(int z_from, int z_to, int s_from, int s_to) {
 	change_place(board[z_from][s_from]->getPiece(), board[z_from][s_from]->getColor(), z_to, s_to);
 	change_place(EMPTY, NONE, z_from, s_from);
 }
+
 bool Board::IsEmpty(int z, int s) {
 	if (board[z][s]->getPiece() == EMPTY)
     	return true;
