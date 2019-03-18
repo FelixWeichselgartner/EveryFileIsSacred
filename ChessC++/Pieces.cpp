@@ -367,3 +367,7 @@ bool Pawn::movement(Board *NewBoard, int z_from, int z_to, int s_from, int s_to)
 	}
 	return true;
 }
+
+Piece::~Piece() {
+	
+}

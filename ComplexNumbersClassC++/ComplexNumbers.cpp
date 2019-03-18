@@ -8,11 +8,25 @@ class Complex {
         double vreal, vimag;
         double a, phi; //phi in degree
 
-    public:
+        void calculate() {
+            const double pi = 3.14159265358979323846;
+            a = sqrt(vreal * vreal + vimag * vimag);
+            phi = 180 / pi * atan2(vimag, vreal);
+        }
+
+        void calculate2() {
+            const double pi = 3.14159265358979323846;
+            double phi_radian = phi / 180 * pi;
+            vreal = a * cos(phi_radian);
+            vimag = a * sin(phi_radian);
+        }
+
+      public:
         //default constructor
         Complex() {
             vreal = vimag = a = phi = 0;
         }
+
         //general constructor
         Complex(double first, double second, char form) {
             if (form == 'p') {
@@ -27,35 +41,25 @@ class Complex {
                 ;
             }
         }
-        
-        //could make those private
-        void calculate() {
-            const double pi = 3.14159265358979323846;
-            a = sqrt(vreal * vreal + vimag * vimag);
-            phi = 180 / pi * atan2(vimag, vreal);
-        }
-        void calculate2() {
-            const double pi = 3.14159265358979323846;
-            double phi_radian = phi / 180 * pi;
-            vreal = a * cos(phi_radian);
-            vimag = a * sin(phi_radian);
-        }
 
         //Set functions
         double setR(double r) {
             vreal = r;
             calculate();
         }
+
         double setI(double i) {
             vimag = i;
             calculate();
         }
-        double setA(double aa) {
-            a = aa;
+
+        double setA(double a) {
+            this->a = a;
             calculate2();
         }
-        double setPhi(double pphi) {
-            phi = pphi;
+
+        double setPhi(double phi) {
+            this->phi = phi;
             calculate2();
         }
 
@@ -63,28 +67,25 @@ class Complex {
         double getReal() {
             return vreal;
         }
+
         double getImaginary() {
             return vimag;
         }
+
         double getAmplitude() {
             return a;
         }
+
         double getPhase() {
             return phi;
         }
+
         void printNumber() {
             cout << vreal << " + j" << vimag << endl;
             cout << a << "* exp(j * " << phi << ")" << endl;
         }
 
-        /*
-        Complex conjugate(Complex res) { 
-            res.vreal = vreal; res.vimag = (-1) * vimag;
-            return res; 
-        }
-        */
-
-        //Kopierkonstruktor
+        //copy constructor
         Complex(const Complex &copy) {
             vreal = copy.vreal;
             vimag = copy.vimag;
@@ -102,6 +103,7 @@ class Complex {
             res.calculate(); 
             return res; 
         }
+
         //subtracting objects
         Complex operator - (Complex const &obj) { 
             Complex res; 
@@ -110,6 +112,7 @@ class Complex {
             res.calculate(); 
             return res; 
         }
+
         //multiplying objects
         Complex operator * (Complex const &obj) { 
             Complex res; 
@@ -118,6 +121,7 @@ class Complex {
             res.calculate2(); 
             return res; 
         }
+
         //dividing objects
         Complex operator / (Complex const &obj) { 
             Complex res;
@@ -135,13 +139,16 @@ class Complex {
             calculate2();
             return res; 
         }
-};
 
-Complex conjugate(Complex n) {
-    Complex res; 
-    res.setR(n.getReal()); res.setI((-1) * n.getImaginary());
-    return res; 
-}
+        //complex conjugate
+        Complex operator ! () { 
+            Complex res; 
+            res.vreal = vreal; 
+            res.vimag = -vimag;
+            res.calculate(); 
+            return res; 
+        }
+};
 
 void declare_complex() {
     char form;
@@ -194,9 +201,6 @@ void overloading_test() {
     cout << endl << "dividing first number by second numbers: " << endl;
     number6 = number1 / number2;
     number6.printNumber();
-    cout << endl << "conjugate complex number of first number: " << endl;
-    number7 = conjugate(number1);
-    number7.printNumber();
     return;
 }
 
@@ -206,9 +210,21 @@ void copy_test() {
     number3.printNumber();
 }
 
+void conjugate_test() {
+    Complex number1 = Complex(2, 1, 'c');
+    Complex number2 = !number1;
+    cout << "original number: ";
+    number1.printNumber();
+    cout << endl;
+    cout << "conjugate complex of the original number: ";
+    number2.printNumber();
+    cout << endl;
+}
+
 int main() {
     //declare_complex();
     //overloading_test();
-    copy_test();
+    //copy_test();
+    conjugate_test();
     return 0;
 }

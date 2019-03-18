@@ -28,6 +28,7 @@ class Board {
 		void change_place(char, char, int, int);
 		void change(int, int, int, int);
 		bool IsEmpty(int, int);   
+		~Board();
 };
 
 #endif
