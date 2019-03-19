@@ -16,7 +16,7 @@ Board::Board() {
     EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
     EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,  EMPTY,
     PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,   PAWN,
-    ROOK,   KNIGHT, BISHOP, KING,   QUEEN,  BISHOP, KNIGHT, ROOK};
+    ROOK,   KNIGHT, BISHOP, KING,   QUEEN,  BISHOP, KNIGHT, ROOK;
     the top line is black
     the bottom line is white
     */
@@ -69,12 +69,14 @@ void Board::print_board() {
         }
     cout << "   ----------------" << endl << "   A B C D E F G H" << endl;
 }
+
 bool Board::check(Board NewBoard, int z_from, int z_to, int s_from, int s_to) {
     bool temp = board[z_from][s_from]->movement(&NewBoard, z_from, z_to, s_from, s_to);
     if (!temp)
         cout << "This move is not possible. Please enter a new move" << endl;
 	return temp;
 }
+
 int Board::winner(int z_from, int z_to, int s_from, int s_to) {
 	int help = 0;
 	if (board[z_to][s_to]->getPiece() == KING && board[z_to][s_to]->getColor() == WHITE)
@@ -125,4 +127,12 @@ bool Board::IsEmpty(int z, int s) {
     	return true;
 	else
 		return false;
+}
+
+Board::~Board() {
+    for (int i = 0; i < fieldsize; i++) {
+        for (int k = 0; k < fieldsize; k++) {
+            delete board[i][k];
+        }
+    }
 }

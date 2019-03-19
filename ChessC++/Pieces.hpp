@@ -23,6 +23,7 @@ class Piece {
         void setPiece(char set);
         char getColor();
         void setColor(char set);
+        ~Piece();
 };
 
 /*
