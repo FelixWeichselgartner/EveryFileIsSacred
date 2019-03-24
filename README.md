@@ -188,3 +188,13 @@ calculates a certain number of prime numbers with a selfmade algorithm
 * prime number calculation
 
 *****************************************************************************
+
+## VideoProcessing - TimeLapse.py
+
+this program reads in a long video and then creates a time lapse of it.
+
+## What I Learned
+
+* processing a video in python
+
+*****************************************************************************
