@@ -178,6 +178,17 @@ converting strings in the morse code alphabet
 
 *****************************************************************************
 
+## PPM (Portable Pixmap)
+
+library for saving rgb values to a raw image
+
+## What I Learned
+
+* PPM file format
+* improved working with binary files in C
+
+*****************************************************************************
+
 ## primeNumberCalculator
 
 calculates a certain number of prime numbers with a selfmade algorithm
