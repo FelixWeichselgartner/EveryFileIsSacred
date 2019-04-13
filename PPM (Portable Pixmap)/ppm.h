@@ -90,8 +90,8 @@ void write_ppm_file(struct ppm_file* f) {
 
 void close_ppm_file(struct ppm_file* f) {
     free(f->data);
-    free(f);
     fclose(f->fp);
+    free(f);
 }
 
 #endif
