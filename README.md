@@ -106,6 +106,16 @@ implementation of the Four Wins game
 
 *****************************************************************************
 
+## Hurwitz
+
+implementation of the Hurwitz criteria
+
+## What I Learned
+
+* learning to calculate the Hurwitz-Determinants of characteristic polynoms.
+
+*****************************************************************************
+
 ## PasswordHashing
 
 using a python lib to hash a password
