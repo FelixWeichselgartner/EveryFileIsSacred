@@ -106,50 +106,6 @@ implementation of the Four Wins game
 
 *****************************************************************************
 
-## Hurwitz
-
-implementation of the Hurwitz criteria
-
-## What I Learned
-
-* learning to calculate the Hurwitz-Determinants of characteristic polynoms.
-
-*****************************************************************************
-
-## PasswordHashing
-
-using a python lib to hash a password
-
-## What I Learned
-
-* function principle of password hashes
-
-*****************************************************************************
-
-## SharedLibPythonC
-
-using c functions in python with ctypes
-
-## What I Learned
-
-* importing c functions in python
-
-*****************************************************************************
-
-## TicTacToeGUIC++
-
-a GUI for a previous written TicTacToe script in python
-
-this implementation is in C++
-
-for the GUI I used SFML
-
-## What I Learned
-
-* importing c functions in python
-
-*****************************************************************************
-
 ## fweichsel_header
 
 my own c headers
@@ -163,6 +119,16 @@ my own c headers
 ## What I Learned
 
 * using headers in C
+
+*****************************************************************************
+
+## Hurwitz
+
+implementation of the Hurwitz criteria
+
+## What I Learned
+
+* learning to calculate the Hurwitz-Determinants of characteristic polynoms.
 
 *****************************************************************************
 
@@ -199,6 +165,16 @@ library for saving rgb values to a raw image
 
 *****************************************************************************
 
+## PasswordHashing
+
+using a python lib to hash a password
+
+## What I Learned
+
+* function principle of password hashes
+
+*****************************************************************************
+
 ## primeNumberCalculator
 
 calculates a certain number of prime numbers with a selfmade algorithm
@@ -207,6 +183,30 @@ calculates a certain number of prime numbers with a selfmade algorithm
 
 * namespace usage in C++
 * prime number calculation
+
+*****************************************************************************
+
+## SharedLibPythonC
+
+using c functions in python with ctypes
+
+## What I Learned
+
+* importing c functions in python
+
+*****************************************************************************
+
+## TicTacToeGUIC++
+
+a GUI for a previous written TicTacToe script in python
+
+this implementation is in C++
+
+for the GUI I used SFML
+
+## What I Learned
+
+* importing c functions in python
 
 *****************************************************************************
 
