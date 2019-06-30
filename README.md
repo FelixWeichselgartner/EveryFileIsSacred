@@ -134,9 +134,11 @@ implementation of the Hurwitz criteria
 ## LearningSocketProgramming
 
 learning to use tcp/http and udp sockets to receive foreign data and process it.
- - getting html of website.
- - getting the clock time.
- - getting local weather data.
+
+- getting html of website.
+- getting the clock time.
+- getting local weather data.
+
 Might be used later in a RaspberryPi project.
 
 ## What I Learned
