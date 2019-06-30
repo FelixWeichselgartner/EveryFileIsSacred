@@ -89,7 +89,6 @@ Therefore I first created a translation list
 
 After starting I realised that I didn't want to change this all by hand since there were like 500 room numbers
 
-
 ## What I Learned
 
 * file management in python
@@ -129,6 +128,22 @@ implementation of the Hurwitz criteria
 ## What I Learned
 
 * learning to calculate the Hurwitz-Determinants of characteristic polynoms.
+
+*****************************************************************************
+
+## LearningSocketProgramming
+
+learning to use tcp/http and udp sockets to receive foreign data and process it.
+ - getting html of website.
+ - getting the clock time.
+ - getting local weather data.
+Might be used later in a RaspberryPi project.
+
+## What I Learned
+
+* using sockets in python.
+* using json in python.
+* using dictionaries in python.
 
 *****************************************************************************
 
